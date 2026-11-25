@@ -1,70 +1,52 @@
-const CACHE_NAME = "badyetly-pwa-v15";
+const CACHE_NAME = "badyetly-pwa-v16";
 const APP_SHELL = [
-    "./",
-    "./index.html",
-    "./style.css",
-    "./script.js",
-    "./manifest.json",
-    "./icon.svg",
-    "./pwa-192x192.png",
-    "./pwa-512x512.png",
-    "./pwa-maskable-512x512.png",
-    "./apple-touch-icon.png"
+    "./", "./index.html", "./style.css", "./script.js", "./manifest.json",
+    "./icon.svg", "./pwa-192x192.png", "./pwa-512x512.png",
+    "./pwa-maskable-512x512.png", "./apple-touch-icon.png"
 ];
 
-self.addEventListener("install", (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return Promise.allSettled(
-                APP_SHELL.map((url) => cache.add(url))
-            );
-        }).then(() => self.skipWaiting())
+self.addEventListener("install", e => {
+    e.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(c => Promise.allSettled(APP_SHELL.map(u => c.add(u))))
+            .then(() => self.skipWaiting())
     );
 });
 
-self.addEventListener("activate", (event) => {
-    event.waitUntil(
-        caches.keys().then((keys) =>
-            Promise.all(
-                keys
-                    .filter((key) => key !== CACHE_NAME)
-                    .map((key) => caches.delete(key))
-            )
-        ).then(() => self.clients.claim())
+self.addEventListener("activate", e => {
+    e.waitUntil(
+        caches.keys()
+            .then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))))
+            .then(() => self.clients.claim())
     );
 });
 
-self.addEventListener("fetch", (event) => {
-    const request = event.request;
-    if (request.method !== "GET") return;
+self.addEventListener("fetch", e => {
+    const req = e.request;
+    if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
 
-    const url = new URL(request.url);
-    if (url.origin !== self.location.origin) {
-        return;
-    }
-
-    if (request.mode === "navigate") {
-        event.respondWith(
-            fetch(request)
-                .then((response) => {
-                    const copy = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put("./index.html", copy));
-                    return response;
+    if (req.mode === "navigate") {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 2500);
+        e.respondWith(
+            fetch(req, { signal: ctrl.signal })
+                .then(res => {
+                    clearTimeout(timer);
+                    if (res && res.ok) caches.open(CACHE_NAME).then(c => c.put("./index.html", res.clone()));
+                    return res;
                 })
-                .catch(() => caches.match("./index.html"))
+                .catch(() => caches.match("./index.html", { ignoreSearch: true }))
         );
         return;
     }
 
-    event.respondWith(
-        fetch(request)
-            .then((response) => {
-                if (response && response.ok) {
-                    const copy = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-                }
-                return response;
-            })
-            .catch(() => caches.match(request))
+    e.respondWith(
+        caches.match(req, { ignoreSearch: true }).then(cached => {
+            const net = fetch(req).then(res => {
+                if (res && res.ok) caches.open(CACHE_NAME).then(c => c.put(req, res.clone()));
+                return res;
+            }).catch(() => cached);
+            return cached || net;
+        })
     );
 });
