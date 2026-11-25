@@ -1025,7 +1025,6 @@ function goBackNav() {
         });
     }
 }
-
 function setSettingsTab(tab, options = {}) {
     const isAbout = tab === "about";
     const prefsPanel = document.getElementById("settingsPanelPrefs");
@@ -1381,6 +1380,196 @@ function makeId() {
         Math.random().toString(36).slice(2, 8);
 }
 
+function sha256Hex(ascii) {
+    function rightRotate(value, amount) {
+        return (value >>> amount) | (value << (32 - amount));
+    }
+    const utf8 = unescape(encodeURIComponent(String(ascii ?? "")));
+    const mathPow = Math.pow;
+    const maxWord = mathPow(2, 32);
+    let result = "";
+    const words = [];
+    const asciiBitLength = utf8.length * 8;
+    const hash = [];
+    const k = [];
+    let primeCounter = 0;
+    const isComposite = {};
+    for (let candidate = 2; primeCounter < 64; candidate++) {
+        if (!isComposite[candidate]) {
+            for (let i = 0; i < 313; i += candidate) {
+                isComposite[i] = candidate;
+            }
+            hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
+            k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+        }
+    }
+    let msg = utf8 + "\x80";
+    while ((msg.length % 64) - 56) msg += "\x00";
+    for (let i = 0; i < msg.length; i++) {
+        const j = msg.charCodeAt(i);
+        if (j >> 8) return "";
+        words[i >> 2] |= j << (((3 - i) % 4) * 8);
+    }
+    words[words.length] = (asciiBitLength / maxWord) | 0;
+    words[words.length] = asciiBitLength;
+    for (let j = 0; j < words.length;) {
+        const w = words.slice(j, j += 16);
+        const oldHash = hash.slice(0);
+        for (let i = 0; i < 64; i++) {
+            const w15 = w[i - 15];
+            const w2 = w[i - 2];
+            const a = hash[0];
+            const e = hash[4];
+            const temp1 =
+                hash[7] +
+                (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) +
+                ((e & hash[5]) ^ (~e & hash[6])) +
+                k[i] +
+                (w[i] = i < 16
+                    ? w[i]
+                    : (
+                        w[i - 16] +
+                        (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) +
+                        w[i - 7] +
+                        (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))
+                    ) | 0);
+            const temp2 =
+                (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) +
+                ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+            hash.unshift((temp1 + temp2) | 0);
+            hash[4] = (hash[4] + temp1) | 0;
+            hash.pop();
+        }
+        for (let i = 0; i < 8; i++) {
+            hash[i] = (hash[i] + oldHash[i]) | 0;
+        }
+    }
+    for (let i = 0; i < 8; i++) {
+        for (let j = 3; j + 1; j--) {
+            const b = (hash[i] >> (j * 8)) & 255;
+            result += (b < 16 ? "0" : "") + b.toString(16);
+        }
+    }
+    return result;
+}
+
+function makeSalt() {
+    if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+        const bytes = new Uint8Array(12);
+        crypto.getRandomValues(bytes);
+        return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+    }
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
+}
+
+function hashAccountSecret(secret, salt) {
+    let digest = sha256Hex("badyetly:" + String(salt) + ":" + String(secret ?? ""));
+    for (let i = 0; i < 200; i++) {
+        digest = sha256Hex(digest + ":" + String(salt));
+    }
+    return digest;
+}
+
+function setAccountPasswordFields(account, plainPass) {
+    const salt = makeSalt();
+    account.passHash = hashAccountSecret(String(plainPass ?? ""), salt);
+    account.passSalt = salt;
+    delete account.pass;
+    delete account.password;
+    return account;
+}
+
+function hasAccountPassword(account) {
+    if (!account) return false;
+    return Boolean(
+        (account.passHash && account.passSalt) ||
+        account.pass !== undefined ||
+        account.password !== undefined
+    );
+}
+
+function verifyAccountPassword(account, plainPass) {
+    if (!account) return false;
+    if (account.passHash && account.passSalt) {
+        return hashAccountSecret(String(plainPass ?? ""), account.passSalt) === account.passHash;
+    }
+    const legacy = account.pass !== undefined ? account.pass : account.password;
+    if (legacy === undefined) return false;
+    return String(legacy) === String(plainPass ?? "");
+}
+
+function setAccountRecoveryPinFields(account, pin) {
+    const salt = makeSalt();
+    account.recoveryPinHash = hashAccountSecret(String(pin).trim(), salt);
+    account.recoveryPinSalt = salt;
+    delete account.recoveryPin;
+    return account;
+}
+
+function hasAccountRecoveryPin(account) {
+    if (!account) return false;
+    return Boolean((account.recoveryPinHash && account.recoveryPinSalt) || account.recoveryPin);
+}
+
+function verifyAccountRecoveryPin(account, enteredPin) {
+    if (!hasAccountRecoveryPin(account)) return true;
+    const clean = String(enteredPin ?? "").trim();
+    if (account.recoveryPinHash && account.recoveryPinSalt) {
+        return hashAccountSecret(clean, account.recoveryPinSalt) === account.recoveryPinHash;
+    }
+    return clean === String(account.recoveryPin);
+}
+
+function upgradeLegacyAccountFields(account) {
+    if (!account) return false;
+    let changed = false;
+    const legacyPass = account.pass !== undefined ? account.pass : account.password;
+    if (legacyPass !== undefined && (!account.passHash || !account.passSalt)) {
+        setAccountPasswordFields(account, String(legacyPass));
+        changed = true;
+    } else if (account.pass !== undefined || account.password !== undefined) {
+        delete account.pass;
+        delete account.password;
+        changed = true;
+    }
+    if (account.recoveryPin && (!account.recoveryPinHash || !account.recoveryPinSalt)) {
+        setAccountRecoveryPinFields(account, account.recoveryPin);
+        changed = true;
+    } else if (account.recoveryPin !== undefined) {
+        delete account.recoveryPin;
+        changed = true;
+    }
+    return changed;
+}
+
+function buildBackupAccountMeta(account) {
+    if (!account) return null;
+    if (upgradeLegacyAccountFields(account)) {
+        saveAccounts();
+    }
+    const meta = {};
+    if (account.passHash && account.passSalt) {
+        meta.passHash = account.passHash;
+        meta.passSalt = account.passSalt;
+    }
+    if (account.recoveryPinHash && account.recoveryPinSalt) {
+        meta.recoveryPinHash = account.recoveryPinHash;
+        meta.recoveryPinSalt = account.recoveryPinSalt;
+    }
+    return Object.keys(meta).length ? meta : null;
+}
+
+function syncLoginPassRequirement(accountName) {
+    const passEl = document.getElementById("loginPass");
+    if (!passEl) return;
+    const acc = accountName ? getAccount(accountName) : null;
+    const needsPass = !acc || hasAccountPassword(acc) || Boolean(acc.googleUid);
+    passEl.required = needsPass;
+    passEl.placeholder = needsPass
+        ? "Enter your password"
+        : "No password set yet (click Log In)";
+}
+
 /* ==========================================
 LOGIN AND REGISTER
 ========================================== */
@@ -1532,7 +1721,7 @@ function renderSaved() {
         trigger.appendChild(avatar);
         trigger.appendChild(name);
 
-        if (account.recoveryPin) {
+        if (hasAccountRecoveryPin(account)) {
             const pinBadge = document.createElement("span");
             pinBadge.className = "account-chip-pin";
             pinBadge.textContent = "🔒";
@@ -1562,6 +1751,7 @@ function renderSaved() {
 
 function selectAccount(name) {
     document.getElementById("loginName").value = name;
+    syncLoginPassRequirement(name);
     document.getElementById("loginPass").focus();
 
     const debug = document.getElementById("debug");
@@ -1579,8 +1769,8 @@ function login() {
     const rememberEl = document.getElementById("rememberMe");
     const keepLoggedIn = rememberEl ? rememberEl.checked : true;
 
-    if (!name || !pass) {
-        debug.innerText = "Please enter your account name and password.";
+    if (!name) {
+        debug.innerText = "Please enter your account name.";
         return;
     }
 
@@ -1591,23 +1781,31 @@ function login() {
         return;
     }
 
-    const savedPassword =
-        account.pass !== undefined
-            ? account.pass
-            : account.password;
+    if (!hasAccountPassword(account)) {
+        if (account.googleUid) {
+            debug.innerText = "This account uses Google Cloud Sign-In or needs a password set in Settings.";
+            return;
+        }
+        setActiveUserSession(account.name, keepLoggedIn);
+        data = loadUserData(user);
+        activeFilterDate = null;
+        location.reload();
+        return;
+    }
 
-    if (
-        savedPassword === undefined ||
-        String(savedPassword) !== pass
-    ) {
+    if (!pass) {
+        debug.innerText = "Please enter your account name and password.";
+        return;
+    }
+
+    if (!verifyAccountPassword(account, pass)) {
         debug.innerText = "Incorrect password. Please try again.";
         return;
     }
 
-    account.pass = String(savedPassword);
-    delete account.password;
-
-    saveAccounts();
+    if (upgradeLegacyAccountFields(account)) {
+        saveAccounts();
+    }
 
     setActiveUserSession(account.name, keepLoggedIn);
 
@@ -1617,86 +1815,6 @@ function login() {
     location.reload();
 }
 
-function register() {
-    const name = document.getElementById("registerName")
-        .value.trim();
-
-    const pass = document.getElementById("registerPass")
-        .value;
-
-    const confirmPass = document.getElementById("confirmPass")
-        .value;
-
-    const pinEl = document.getElementById("registerPin");
-    const recoveryPin = pinEl ? pinEl.value.trim() : "";
-    const regDebug = document.getElementById("registerDebug");
-
-    const setRegError = msg => {
-        if (regDebug) regDebug.innerText = msg;
-        showToast(msg, "warning");
-    };
-
-    if (regDebug) regDebug.innerText = "";
-
-    if (!name || !pass || !confirmPass) {
-        setRegError("Please complete all required fields.");
-        return;
-    }
-
-    if (pass.length < 4) {
-        setRegError("Password must be at least 4 characters.");
-        return;
-    }
-
-    if (pass !== confirmPass) {
-        if (regDebug) regDebug.innerText = "Passwords do not match.";
-        showToast("Passwords do not match.", "error");
-        return;
-    }
-
-    if (recoveryPin && !/^\d{4}$/.test(recoveryPin)) {
-        setRegError("Recovery PIN must be exactly 4 digits (or leave it blank).");
-        return;
-    }
-
-    if (getAccount(name)) {
-        setRegError("This account name already exists. Please log in.");
-        return;
-    }
-
-    const newAccount = {
-        name: name,
-        pass: pass
-    };
-
-    if (recoveryPin) {
-        newAccount.recoveryPin = recoveryPin;
-    }
-
-    accounts.push(newAccount);
-
-    if (!saveAccounts()) {
-        accounts.pop();
-        return;
-    }
-
-    localStorage.setItem(
-        getUserDataKey(name),
-        JSON.stringify(emptyData())
-    );
-
-    showToast("Account created successfully! You can now log in.", "success");
-
-    document.getElementById("loginName").value = name;
-    document.getElementById("loginPass").value = "";
-    document.getElementById("registerPass").value = "";
-    document.getElementById("confirmPass").value = "";
-    if (pinEl) pinEl.value = "";
-    updateRegisterValidationUI();
-
-    showLogin();
-    renderSaved();
-}
 
 function tryDemoAccount() {
     loadAccounts();
@@ -1710,7 +1828,7 @@ function tryDemoAccount() {
 
     let demoAccount = getAccount(demoName);
     if (!demoAccount) {
-        demoAccount = { name: demoName, pass: demoPass };
+        demoAccount = setAccountPasswordFields({ name: demoName }, demoPass);
         accounts.push(demoAccount);
         if (!saveAccounts()) {
             accounts.pop();
@@ -1778,74 +1896,6 @@ async function logout() {
     clearActiveUserSession();
     location.reload();
 }
-
-async function forgotPassword() {
-    let name = document.getElementById("loginName").value.trim();
-
-    if (!name) {
-        name = await showPromptModal({
-            eyebrow: "RESET PASSWORD",
-            title: "Find Your Account",
-            message: "Enter the account name you want to reset.",
-            label: "Account Name",
-            placeholder: "e.g. Maria",
-            confirmText: "Next"
-        });
-        if (!name || !name.trim()) return;
-        name = name.trim();
-    }
-
-    const account = getAccount(name);
-
-    if (!account) {
-        showToast("Account not found.", "error");
-        return;
-    }
-
-    if (account.recoveryPin) {
-        const enteredPin = await showPromptModal({
-            eyebrow: "SECURITY CHECK",
-            title: "Verify Recovery PIN",
-            message: 'Enter the 4-digit Recovery PIN for "' + account.name + '" to reset your password.',
-            label: "4-Digit Recovery PIN",
-            placeholder: "••••",
-            inputType: "password",
-            confirmText: "Verify PIN"
-        });
-
-        if (enteredPin === null) return;
-
-        if (String(enteredPin).trim() !== String(account.recoveryPin)) {
-            showToast("Incorrect Recovery PIN. Password reset cancelled.", "error");
-            return;
-        }
-    }
-
-    const newPassword = await showPromptModal({
-        eyebrow: "RESET PASSWORD",
-        title: "Create New Password",
-        message: 'Enter a new password for "' + account.name + '" (at least 4 characters).',
-        label: "New Password",
-        placeholder: "At least 4 characters",
-        inputType: "password",
-        confirmText: "Reset Password"
-    });
-
-    if (!newPassword) return;
-
-    if (newPassword.length < 4) {
-        showToast("Password must be at least 4 characters.", "warning");
-        return;
-    }
-
-    account.pass = newPassword;
-    delete account.password;
-
-    if (!saveAccounts()) return;
-
-    showToast("Password reset successfully!", "success");
-}
-
 async function deleteSavedAccount(name) {
     const confirmed = await showConfirmModal({
         eyebrow: "PERMANENT DELETE",
@@ -2012,14 +2062,14 @@ function changePassword() {
         return;
     }
 
-    account.pass = newPassword;
-    delete account.password;
+    setAccountPasswordFields(account, newPassword);
 
     if (!saveAccounts()) return;
 
     if (newPassEl) newPassEl.value = "";
     if (confirmEl) confirmEl.value = "";
 
+    syncRecoveryPinStatus();
     showToast("Password updated successfully!", "success");
 }
 
@@ -2028,7 +2078,10 @@ function syncRecoveryPinStatus() {
     if (!statusEl || !user) return;
 
     const account = getAccount(user);
-    if (account && account.recoveryPin) {
+    if (account && !hasAccountPassword(account) && !account.googleUid) {
+        statusEl.textContent = "Password not set yet (restored from older backup). Set a password above and a 4-digit Recovery PIN below.";
+        statusEl.style.color = "var(--eyebrow)";
+    } else if (account && hasAccountRecoveryPin(account)) {
         statusEl.textContent = "Recovery PIN is active. Password resets require this 4-digit PIN.";
         statusEl.style.color = "var(--green)";
     } else {
@@ -2054,7 +2107,7 @@ function updateRecoveryPin() {
         return;
     }
 
-    account.recoveryPin = pin;
+    setAccountRecoveryPinFields(account, pin);
     if (!saveAccounts()) return;
 
     if (pinEl) pinEl.value = "";
@@ -2751,7 +2804,6 @@ async function deleteGoal(goalId) {
     saveUserData();
     showToast('Savings goal "' + goal.name + '" deleted.', "info");
 }
-
 /* ==========================================
 BUDGET LIMIT
 ========================================== */
@@ -2909,9 +2961,14 @@ function downloadBlob(blob, filename) {
 function backupData() {
     if (!user) return;
 
+    loadAccounts();
+    const currentAcc = getAccount(user);
+    const accountMeta = buildBackupAccountMeta(currentAcc);
+
     const backup = {
         accountName: user,
         exportedAt: new Date().toISOString(),
+        ...(accountMeta ? { accountMeta } : {}),
         ...data
     };
 
@@ -3654,7 +3711,6 @@ function clearTransactionFilters() {
 
     renderAll();
 }
-
 /* ==========================================
 EDIT MODAL (GOALS & TRANSACTIONS)
 ========================================== */
@@ -4387,7 +4443,6 @@ function formatGoalPaceHTML(goal, remaining) {
         </div>
     `;
 }
-
 /* ==========================================
 MAIN RENDER FUNCTION
 ========================================== */
@@ -5187,6 +5242,26 @@ function restoreBackupToExistingAccount(account, imported) {
         settings: normalizeUserSettings(imported.settings)
     };
 
+    const meta = imported && imported.accountMeta && typeof imported.accountMeta === "object"
+        ? imported.accountMeta
+        : null;
+    if (meta) {
+        let accountUpdated = false;
+        if (!hasAccountPassword(account) && meta.passHash && meta.passSalt) {
+            account.passHash = String(meta.passHash);
+            account.passSalt = String(meta.passSalt);
+            accountUpdated = true;
+        }
+        if (!hasAccountRecoveryPin(account) && meta.recoveryPinHash && meta.recoveryPinSalt) {
+            account.recoveryPinHash = String(meta.recoveryPinHash);
+            account.recoveryPinSalt = String(meta.recoveryPinSalt);
+            accountUpdated = true;
+        }
+        if (accountUpdated) {
+            saveAccounts();
+        }
+    }
+
     const storageKey = getUserDataKey(account.name);
     const previousData = localStorage.getItem(storageKey);
 
@@ -5203,7 +5278,12 @@ function restoreBackupToExistingAccount(account, imported) {
         );
 
         document.getElementById("loginName").value = account.name;
-        document.getElementById("loginPass").value = "";
+        syncLoginPassRequirement(account.name);
+        const loginPassEl = document.getElementById("loginPass");
+        if (loginPassEl) {
+            loginPassEl.value = "";
+            loginPassEl.focus();
+        }
 
         const debug = document.getElementById("debug");
 
@@ -5244,7 +5324,7 @@ async function createNewAccountFromBackup(imported, originalName) {
             message: "This account name is already in use. Enter a different name for your restored account.",
             label: "Account Name",
             defaultValue: originalName + " Restored",
-            confirmText: "Next"
+            confirmText: "Restore Account"
         });
 
         if (!enteredName || !enteredName.trim()) return;
@@ -5257,44 +5337,21 @@ async function createNewAccountFromBackup(imported, originalName) {
         }
     }
 
-    const newPassword = await showPromptModal({
-        eyebrow: "SET PASSWORD",
-        title: "Create New Password",
-        message: "Create a new password for your restored account (old passwords are not stored in backups).",
-        label: "New Password",
-        placeholder: "At least 4 characters",
-        inputType: "password",
-        confirmText: "Next"
-    });
+    const meta = imported && imported.accountMeta && typeof imported.accountMeta === "object"
+        ? imported.accountMeta
+        : null;
+    const hasPreservedPassword = Boolean(meta && meta.passHash && meta.passSalt);
 
-    if (!newPassword) return;
+    const newAccount = { name: newName };
 
-    if (newPassword.length < 4) {
-        showToast("Password must be at least 4 characters.", "warning");
-        return;
+    if (hasPreservedPassword) {
+        newAccount.passHash = String(meta.passHash);
+        newAccount.passSalt = String(meta.passSalt);
+        if (meta.recoveryPinHash && meta.recoveryPinSalt) {
+            newAccount.recoveryPinHash = String(meta.recoveryPinHash);
+            newAccount.recoveryPinSalt = String(meta.recoveryPinSalt);
+        }
     }
-
-    const confirmPassword = await showPromptModal({
-        eyebrow: "CONFIRM PASSWORD",
-        title: "Confirm New Password",
-        message: "Enter your new password again to confirm.",
-        label: "Confirm Password",
-        placeholder: "Re-enter password",
-        inputType: "password",
-        confirmText: "Restore Account"
-    });
-
-    if (confirmPassword === null) return;
-
-    if (newPassword !== confirmPassword) {
-        showToast("Passwords do not match. Please try again.", "error");
-        return;
-    }
-
-    const newAccount = {
-        name: newName,
-        pass: newPassword
-    };
 
     const restoredData = {
         incomes: imported.incomes,
@@ -5326,19 +5383,35 @@ async function createNewAccountFromBackup(imported, originalName) {
             JSON.stringify(restoredData)
         );
 
+        if (!hasPreservedPassword) {
+            setActiveUserSession(newName, true);
+            showToast(
+                "Backup restored as " + newName + "! Opening Badyetly — you can set a password & PIN in Settings.",
+                "success",
+                4500
+            );
+            setTimeout(() => location.reload(), 250);
+            return;
+        }
+
         showToast(
-            "Backup restored as " + newName + "! You can now log in.",
+            "Backup restored as " + newName + "! Log in with your original password.",
             "success",
             5000
         );
 
         document.getElementById("loginName").value = newName;
-        document.getElementById("loginPass").value = "";
+        syncLoginPassRequirement(newName);
+        const loginPassEl = document.getElementById("loginPass");
+        if (loginPassEl) {
+            loginPassEl.value = "";
+            loginPassEl.focus();
+        }
 
         const debug = document.getElementById("debug");
 
         if (debug) {
-            debug.innerText = "Account restored. Please log in.";
+            debug.innerText = "Account restored. Log in with your original password.";
         }
 
         renderSaved();
@@ -5354,7 +5427,6 @@ async function createNewAccountFromBackup(imported, originalName) {
         showToast("Unable to save the restored backup. Please try again.", "error");
     }
 }
-
 /* ==========================================
 CUSTOM CATEGORIES MANAGER
 ========================================== */
@@ -6200,7 +6272,7 @@ async function loginWithGoogleCloudSync() {
                 showToast("Password must be at least 4 characters.", "warning");
                 return;
             }
-            localAcc = { name: cloudAccountName, pass: newPass };
+            localAcc = setAccountPasswordFields({ name: cloudAccountName, googleUid: gUser.uid }, newPass);
             accounts.push(localAcc);
             if (!saveAccounts()) {
                 accounts.pop();
@@ -6451,6 +6523,11 @@ const resetPinAttempts = {};
             inp.required = true;
             inp.placeholder = "4 digits (protects password resets)";
         }
+        const loginNameEl = document.getElementById("loginName");
+        if (loginNameEl && !loginNameEl.dataset.passSyncBound) {
+            loginNameEl.dataset.passSyncBound = "1";
+            loginNameEl.addEventListener("input", () => syncLoginPassRequirement(loginNameEl.value.trim()));
+        }
     };
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", apply);
@@ -6481,7 +6558,8 @@ function register() {
     if (!/^\d{4}$/.test(recoveryPin)) return setErr("Recovery PIN must be exactly 4 digits.");
     if (getAccount(name)) return setErr("This account name already exists. Please log in.");
 
-    const newAccount = { name, pass, recoveryPin };
+    const newAccount = setAccountPasswordFields({ name }, pass);
+    setAccountRecoveryPinFields(newAccount, recoveryPin);
     accounts.push(newAccount);
     if (!saveAccounts()) { accounts.pop(); return; }
 
@@ -6489,6 +6567,7 @@ function register() {
     showToast("Account created with Recovery PIN protection!", "success");
 
     document.getElementById("loginName").value = name;
+    syncLoginPassRequirement(name);
     document.getElementById("loginPass").value = "";
     document.getElementById("registerPass").value = "";
     document.getElementById("confirmPass").value = "";
@@ -6516,11 +6595,11 @@ async function forgotPassword() {
     const account = getAccount(name);
     if (!account) return showToast("Account not found.", "error");
 
-    if (!account.recoveryPin) {
+    if (!hasAccountRecoveryPin(account)) {
         await showConfirmModal({
             eyebrow: "RECOVERY PIN REQUIRED",
             title: "Instant Reset Disabled",
-            message: '"' + account.name + '" has no 4-digit Recovery PIN yet, so password reset is locked for security.\n\nLog in with your current password and set a Recovery PIN in Settings, or restore from a .json backup.',
+            message: '"' + account.name + '" has no 4-digit Recovery PIN yet, so password reset is locked for security.\n\nLog in and set a Recovery PIN in Settings, or restore from a .json backup.',
             confirmText: "Got it",
             cancelText: "Close"
         });
@@ -6545,7 +6624,7 @@ async function forgotPassword() {
     });
     if (enteredPin === null) return;
 
-    if (String(enteredPin).trim() !== String(account.recoveryPin)) {
+    if (!verifyAccountRecoveryPin(account, enteredPin)) {
         state.fails += 1;
         if (state.fails >= 3) {
             state.lockedUntil = Date.now() + 30000;
@@ -6583,9 +6662,10 @@ async function forgotPassword() {
     if (confirmPassword === null) return;
     if (confirmPassword !== newPassword) return showToast("Passwords do not match. Reset cancelled.", "error");
 
-    account.pass = newPassword;
-    delete account.password;
+    upgradeLegacyAccountFields(account);
+    setAccountPasswordFields(account, newPassword);
     if (!saveAccounts()) return;
+    syncLoginPassRequirement(account.name);
     showToast("Password reset successfully!", "success");
 }
 /* ==========================================

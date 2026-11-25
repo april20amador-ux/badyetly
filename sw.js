@@ -1,4 +1,4 @@
-const CACHE_NAME = "badyetly-pwa-v16";
+const CACHE_NAME = "badyetly-pwa-v17";
 const APP_SHELL = [
     "./", "./index.html", "./style.css", "./script.js", "./manifest.json",
     "./icon.svg", "./pwa-192x192.png", "./pwa-512x512.png",
