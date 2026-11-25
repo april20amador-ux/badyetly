@@ -459,12 +459,30 @@ async function triggerPWAInstall() {
     });
 }
 
+let offlineBannerTimer = null;
+
 function updateOnlineStatus(showNotification = false) {
     const banner = document.getElementById("offlineBanner");
     const online = typeof navigator !== "undefined" ? navigator.onLine : true;
 
+    if (offlineBannerTimer) {
+        clearTimeout(offlineBannerTimer);
+        offlineBannerTimer = null;
+    }
+
     if (banner) {
-        banner.style.display = online ? "none" : "inline-flex";
+        if (online) {
+            banner.style.display = "none";
+        } else {
+            banner.style.display = "inline-flex";
+            banner.title = "Tap to dismiss";
+            banner.onclick = () => {
+                banner.style.display = "none";
+            };
+            offlineBannerTimer = setTimeout(() => {
+                banner.style.display = "none";
+            }, 5000);
+        }
     }
 
     if (showNotification) {
