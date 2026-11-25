@@ -1,0 +1,4249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" id="themeColorMeta" content="#172B4D">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Badyetly">
+    <meta name="description" content="Badyetly - Track your money wisely.">
+    <title>Badyetly | Personal Budget Tracker</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem("badyetly_theme") === "dark") {
+                    document.documentElement.setAttribute("data-theme", "dark");
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ABOUT / CORE STRUCTURAL STYLES */
+
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .guide-note {
+            background: var(--gold-soft, #f8f5ed);
+            border-left: 3px solid var(--gold, #d6b979);
+            padding: 14px 17px;
+            border-radius: 8px;
+            color: var(--text, #5f5a4c);
+            font-size: 12px;
+            line-height: 1.8;
+            margin-top: 18px;
+        }
+
+        .about-banner {
+            background: linear-gradient(135deg, #172b4d 0%, #1f3962 58%, #101f38 100%);
+            color: white;
+            padding: 28px 24px;
+            border-radius: 18px;
+            border: 1px solid rgba(214, 185, 121, 0.25);
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 14px 36px rgba(16, 31, 56, 0.14);
+        }
+
+        .about-logo {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            border: 2px solid #d6b979;
+            border-radius: 16px;
+            background: rgba(214, 185, 121, 0.1);
+            color: #d6b979;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .about-banner h2 {
+            color: white;
+            margin: 0 0 6px;
+            font-size: 24px;
+        }
+
+        .about-banner p {
+            color: #e1e7ef;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .about-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .about-info {
+            padding: 16px;
+            border: 1px solid var(--border, #e3e7ed);
+            border-radius: 13px;
+            background: var(--surface-row, #fff);
+        }
+
+        .about-info small {
+            display: block;
+            color: var(--muted, #71818a);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .about-info strong {
+            color: var(--heading, #172b4d);
+            font-size: 14px;
+        }
+
+        .about-description {
+            color: var(--muted, #71818a);
+            font-size: 13px;
+            line-height: 1.85;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .feature-item {
+            border: 1px solid var(--border, #e3e7ed);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--heading, #172b4d);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ================= PROFESSIONAL DOCUMENTATION & HELP SYSTEM ================= */
+
+        #view-guide.view.active,
+        #view-help.view.active {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Shared Executive Hero Banner */
+        .doc-hero {
+            background: linear-gradient(135deg, #172B4D 0%, #1F3962 62%, #11213A 100%) !important;
+            border: 1px solid rgba(214, 185, 121, 0.32) !important;
+            border-radius: 18px !important;
+            padding: 24px 26px !important;
+            margin-bottom: 20px !important;
+            box-shadow: 0 12px 30px rgba(17, 33, 58, 0.14) !important;
+            color: #FFFFFF !important;
+        }
+
+        .doc-hero-top {
+            display: flex !important;
+            align-items: flex-start !important;
+            justify-content: space-between !important;
+            gap: 16px !important;
+            flex-wrap: wrap !important;
+        }
+
+        .doc-eyebrow {
+            display: inline-block !important;
+            font-size: 10.5px !important;
+            font-weight: 800 !important;
+            letter-spacing: 1.4px !important;
+            text-transform: uppercase !important;
+            color: #E8C97F !important;
+            margin-bottom: 6px !important;
+        }
+
+        .doc-hero h2 {
+            margin: 0 0 6px !important;
+            font-size: 23px !important;
+            font-weight: 800 !important;
+            color: #FFFFFF !important;
+            letter-spacing: -0.3px !important;
+        }
+
+        .doc-hero-sub {
+            margin: 0 !important;
+            font-size: 13px !important;
+            line-height: 1.6 !important;
+            color: #CBD5E1 !important;
+            max-width: 620px !important;
+        }
+
+        /* Segmented Language Switcher */
+        .doc-lang-switch {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 3px !important;
+            padding: 4px !important;
+            border-radius: 11px !important;
+            background: rgba(15, 23, 42, 0.45) !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        }
+
+        .doc-lang-btn {
+            background: transparent !important;
+            color: #CBD5E1 !important;
+            border: none !important;
+            padding: 6px 11px !important;
+            font-size: 11.5px !important;
+            font-weight: 700 !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            transition: background 0.15s ease, color 0.15s ease !important;
+        }
+
+        .doc-lang-btn:hover {
+            color: #FFFFFF !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .doc-lang-btn.active {
+            background: #E8C97F !important;
+            color: #172B4D !important;
+        }
+
+        /* Integrated Hero Search Row */
+        .doc-hero-search {
+            display: flex !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            margin-top: 16px !important;
+        }
+
+        .doc-search-box {
+            position: relative !important;
+            flex: 1 1 260px !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .doc-search-icon {
+            position: absolute !important;
+            left: 13px !important;
+            color: #64748B !important;
+            font-size: 14px !important;
+            pointer-events: none !important;
+        }
+
+        .doc-search-input {
+            width: 100% !important;
+            background: #FFFFFF !important;
+            color: #0F172A !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            border-radius: 10px !important;
+            padding: 10px 14px 10px 36px !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+        }
+
+        .doc-search-input::placeholder {
+            color: #64748B !important;
+            opacity: 1 !important;
+        }
+
+        .doc-hero-btn {
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #FFFFFF !important;
+            border: 1px solid rgba(255, 255, 255, 0.22) !important;
+            padding: 10px 14px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            border-radius: 10px !important;
+            cursor: pointer !important;
+        }
+
+        .doc-hero-btn:hover {
+            background: rgba(255, 255, 255, 0.22) !important;
+        }
+
+        .doc-hero-btn-gold {
+            background: #E8C97F !important;
+            color: #172B4D !important;
+            border-color: #E8C97F !important;
+        }
+
+        .doc-hero-btn-gold:hover {
+            background: #F1D796 !important;
+        }
+
+        /* User Guide 2-Column Documentation Layout */
+        .ug-layout {
+            display: grid !important;
+            grid-template-columns: 248px minmax(0, 1fr) !important;
+            gap: 20px !important;
+            align-items: start !important;
+        }
+
+        .ug-sidebar {
+            position: sticky !important;
+            top: 16px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 14px !important;
+        }
+
+        .ug-side-card {
+            background: #FFFFFF !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 14px !important;
+            padding: 15px !important;
+            box-shadow: 0 2px 10px rgba(23, 43, 77, 0.03) !important;
+        }
+
+        .ug-side-title {
+            font-size: 10.5px !important;
+            font-weight: 800 !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+            color: #64748B !important;
+            margin: 0 0 10px !important;
+        }
+
+        .ug-nav-list {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 4px !important;
+        }
+
+        .ug-nav-btn {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            text-align: left !important;
+            background: transparent !important;
+            color: #334155 !important;
+            border: 1px solid transparent !important;
+            padding: 8px 10px !important;
+            font-size: 12.5px !important;
+            font-weight: 600 !important;
+            border-radius: 9px !important;
+            cursor: pointer !important;
+            transition: background 0.15s ease, color 0.15s ease !important;
+        }
+
+        .ug-nav-btn:hover {
+            background: #F8FAFC !important;
+            color: #172B4D !important;
+        }
+
+        .ug-nav-btn.active {
+            background: #172B4D !important;
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+
+        .ug-nav-badge {
+            font-size: 10.5px !important;
+            font-weight: 700 !important;
+            padding: 1px 7px !important;
+            border-radius: 99px !important;
+            background: #F1F5F9 !important;
+            color: #475569 !important;
+        }
+
+        .ug-nav-btn.active .ug-nav-badge {
+            background: rgba(232, 201, 127, 0.25) !important;
+            color: #FDE68A !important;
+        }
+
+        /* Checklist Progress Widget */
+        .ug-progress-row {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            margin-bottom: 8px !important;
+        }
+
+        .ug-progress-label {
+            font-size: 11.5px !important;
+            font-weight: 800 !important;
+            color: #172B4D !important;
+        }
+
+        .ug-progress-track {
+            width: 100% !important;
+            height: 6px !important;
+            border-radius: 99px !important;
+            background: #E2E8F0 !important;
+            overflow: hidden !important;
+            margin-bottom: 12px !important;
+        }
+
+        .ug-progress-fill {
+            height: 100% !important;
+            width: 0%;
+            background: linear-gradient(90deg, #C8A252, #172B4D) !important;
+            border-radius: 99px !important;
+            transition: width 0.25s ease !important;
+        }
+
+        .ug-check-list {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 7px !important;
+        }
+
+        .ug-check-item {
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+            padding: 7px 9px !important;
+            border-radius: 8px !important;
+            background: #F8FAFC !important;
+            border: 1px solid #E2E8F0 !important;
+            color: #334155 !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
+            cursor: pointer !important;
+        }
+
+        .ug-check-item input {
+            width: 15px !important;
+            height: 15px !important;
+            margin-top: 1px !important;
+            accent-color: #172B4D !important;
+            flex-shrink: 0 !important;
+            cursor: pointer !important;
+        }
+
+        /* Main Guide Toolbar & Chapters */
+        .ug-toolbar {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 10px !important;
+            margin-bottom: 12px !important;
+            padding: 0 2px !important;
+        }
+
+        .ug-meta-count {
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            color: #475569 !important;
+        }
+
+        .ug-ghost-btn {
+            background: #FFFFFF !important;
+            color: #172B4D !important;
+            border: 1px solid #CBD5E1 !important;
+            padding: 6px 12px !important;
+            font-size: 11.5px !important;
+            font-weight: 700 !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+        }
+
+        .ug-ghost-btn:hover {
+            background: #F8FAFC !important;
+            border-color: #94A3B8 !important;
+        }
+
+        .ug-chapter {
+            margin-bottom: 22px !important;
+        }
+
+        .ug-chapter-head {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 10px !important;
+            padding-bottom: 8px !important;
+            margin-bottom: 10px !important;
+            border-bottom: 1px solid #E2E8F0 !important;
+        }
+
+        .ug-chapter-head h3 {
+            margin: 0 !important;
+            font-size: 15px !important;
+            font-weight: 800 !important;
+            color: #172B4D !important;
+            letter-spacing: -0.2px !important;
+        }
+
+        .ug-chapter-tag {
+            font-size: 10.5px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.6px !important;
+            color: #7D5B1C !important;
+            background: #F7F1E1 !important;
+            padding: 3px 9px !important;
+            border-radius: 6px !important;
+        }
+
+        .ug-step {
+            background: #FFFFFF !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 13px !important;
+            margin-bottom: 9px !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        }
+
+        .ug-step[open] {
+            border-color: #CBD5E1 !important;
+            border-left: 3px solid #C8A252 !important;
+            box-shadow: 0 6px 18px rgba(23, 43, 77, 0.05) !important;
+        }
+
+        .ug-step summary {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+            padding: 14px 16px !important;
+            cursor: pointer !important;
+            list-style: none !important;
+            color: #172B4D !important;
+            font-size: 14px !important;
+            font-weight: 700 !important;
+        }
+
+        .ug-step summary::-webkit-details-marker {
+            display: none !important;
+        }
+
+        .ug-step-left {
+            display: flex !important;
+            align-items: center !important;
+            gap: 11px !important;
+            min-width: 0 !important;
+        }
+
+        .ug-num {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 8px !important;
+            background: #F5EFE0 !important;
+            color: #7D5B1C !important;
+            font-size: 11.5px !important;
+            font-weight: 800 !important;
+            flex-shrink: 0 !important;
+        }
+
+        .ug-chev {
+            color: #64748B !important;
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            transition: transform 0.2s ease !important;
+            flex-shrink: 0 !important;
+        }
+
+        .ug-step[open] .ug-chev {
+            transform: rotate(90deg) !important;
+            color: #172B4D !important;
+        }
+
+        .ug-step-body {
+            padding: 0 16px 16px 55px !important;
+        }
+
+        .ug-loc {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 4px 10px !important;
+            border-radius: 7px !important;
+            background: #F1F5F9 !important;
+            color: #334155 !important;
+            font-size: 11.5px !important;
+            font-weight: 700 !important;
+            margin-bottom: 10px !important;
+        }
+
+        .ug-step-body ol {
+            margin: 0 0 10px !important;
+            padding-left: 18px !important;
+            color: #334155 !important;
+            font-size: 13px !important;
+            line-height: 1.7 !important;
+        }
+
+        .ug-step-body li {
+            margin-bottom: 4px !important;
+            color: #334155 !important;
+        }
+
+        .ug-step-body strong {
+            color: #0F172A !important;
+        }
+
+        .ug-step-body code,
+        #view-help .faq-body code,
+        .hc-diag-card code {
+            background: #F1F5F9 !important;
+            color: #172B4D !important;
+            padding: 1px 6px !important;
+            border-radius: 5px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+        }
+
+        .doc-tl-block {
+            padding-top: 8px !important;
+            margin-top: 8px !important;
+            border-top: 1px dashed #E2E8F0 !important;
+        }
+
+        .doc-tl-tag {
+            display: inline-block !important;
+            padding: 1px 6px !important;
+            border-radius: 5px !important;
+            background: #8D6A26 !important;
+            color: #FFFFFF !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.4px !important;
+            margin-right: 6px !important;
+            vertical-align: middle !important;
+        }
+
+        .ug-action-row {
+            display: flex !important;
+            justify-content: flex-end !important;
+            margin-top: 10px !important;
+        }
+
+        .ug-jump-link {
+            background: #FFFFFF !important;
+            color: #172B4D !important;
+            border: 1px solid #CBD5E1 !important;
+            padding: 6px 12px !important;
+            font-size: 11.5px !important;
+            font-weight: 700 !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+        }
+
+        .ug-jump-link:hover {
+            background: #172B4D !important;
+            color: #FFFFFF !important;
+            border-color: #172B4D !important;
+        }
+
+        .doc-advisory {
+            background: #FBF8F1 !important;
+            border: 1px solid #EADBB9 !important;
+            border-left: 4px solid #C8A252 !important;
+            border-radius: 12px !important;
+            padding: 14px 16px !important;
+            color: #334155 !important;
+            font-size: 12.5px !important;
+            line-height: 1.65 !important;
+            margin-top: 12px !important;
+        }
+
+        .doc-advisory strong {
+            color: #172B4D !important;
+        }
+
+        .ug-hidden,
+        .hc-hidden {
+            display: none !important;
+        }
+
+        /* Language visibility states */
+        #view-guide[data-doc-lang="en"] .doc-tl,
+        #view-guide[data-doc-lang="en"] .doc-tl-i,
+        #view-help[data-doc-lang="en"] .doc-tl,
+        #view-help[data-doc-lang="en"] .doc-tl-i {
+            display: none !important;
+        }
+
+        #view-guide[data-doc-lang="tl"] .doc-en,
+        #view-guide[data-doc-lang="tl"] .doc-en-i,
+        #view-help[data-doc-lang="tl"] .doc-en,
+        #view-help[data-doc-lang="tl"] .doc-en-i {
+            display: none !important;
+        }
+
+        #view-guide[data-doc-lang="tl"] .doc-tl-block,
+        #view-help[data-doc-lang="tl"] .doc-tl-block {
+            border-top: none !important;
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+
+        /* ================= HELP CENTER PROFESSIONAL LAYOUT ================= */
+
+        .hc-panel {
+            background: #FFFFFF !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 16px !important;
+            padding: 20px 22px !important;
+            margin-bottom: 18px !important;
+            box-shadow: 0 2px 12px rgba(23, 43, 77, 0.03) !important;
+        }
+
+        .hc-tabs-bar {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 10px !important;
+            padding-bottom: 14px !important;
+            margin-bottom: 14px !important;
+            border-bottom: 1px solid #E2E8F0 !important;
+        }
+
+        .hc-tab-list {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+        }
+
+        .hc-tab {
+            background: #F8FAFC !important;
+            color: #334155 !important;
+            border: 1px solid #E2E8F0 !important;
+            padding: 7px 13px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            border-radius: 9px !important;
+            cursor: pointer !important;
+        }
+
+        .hc-tab:hover {
+            background: #F1F5F9 !important;
+            color: #172B4D !important;
+        }
+
+        .hc-tab.active {
+            background: #172B4D !important;
+            color: #FFFFFF !important;
+            border-color: #172B4D !important;
+        }
+
+        .hc-faq-list {
+            display: grid !important;
+            gap: 8px !important;
+        }
+
+        .hc-faq-item {
+            background: #FFFFFF !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 12px !important;
+            transition: border-color 0.15s ease !important;
+        }
+
+        .hc-faq-item[open] {
+            border-color: #CBD5E1 !important;
+            border-left: 3px solid #C8A252 !important;
+            background: #FCFDFF !important;
+        }
+
+        .hc-faq-item summary {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+            padding: 14px 16px !important;
+            cursor: pointer !important;
+            list-style: none !important;
+            color: #172B4D !important;
+            font-size: 13.5px !important;
+            font-weight: 700 !important;
+        }
+
+        .hc-faq-item summary::-webkit-details-marker {
+            display: none !important;
+        }
+
+        .hc-faq-item[open] .ug-chev {
+            transform: rotate(90deg) !important;
+            color: #172B4D !important;
+        }
+
+        .faq-body {
+            padding: 0 16px 15px !important;
+            color: #334155 !important;
+            font-size: 13px !important;
+            line-height: 1.68 !important;
+        }
+
+        .faq-body p {
+            margin: 0 !important;
+            color: #334155 !important;
+        }
+
+        .hc-support-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 18px !important;
+            align-items: start !important;
+        }
+
+        .hc-card-head {
+            margin-bottom: 12px !important;
+        }
+
+        .hc-card-head small {
+            display: block !important;
+            font-size: 10.5px !important;
+            font-weight: 800 !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+            color: #8D6A26 !important;
+            margin-bottom: 3px !important;
+        }
+
+        .hc-card-head h3 {
+            margin: 0 !important;
+            font-size: 16px !important;
+            font-weight: 800 !important;
+            color: #172B4D !important;
+        }
+
+        #askHelpInput {
+            width: 100% !important;
+            background: #F8FAFC !important;
+            color: #0F172A !important;
+            border: 1px solid #CBD5E1 !important;
+            border-radius: 10px !important;
+            padding: 11px 13px !important;
+            font-size: 13px !important;
+            font-family: inherit !important;
+            resize: vertical !important;
+        }
+
+        #askHelpInput::placeholder {
+            color: #64748B !important;
+            opacity: 1 !important;
+        }
+
+        .hc-ask-actions {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            margin-top: 10px !important;
+        }
+
+        .hc-btn-primary {
+            background: #172B4D !important;
+            color: #FFFFFF !important;
+            border: 1px solid #172B4D !important;
+            padding: 8px 15px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            border-radius: 9px !important;
+            cursor: pointer !important;
+        }
+
+        .hc-btn-primary:hover {
+            background: #233E6B !important;
+        }
+
+        .hc-btn-outline {
+            background: #FFFFFF !important;
+            color: #172B4D !important;
+            border: 1px solid #CBD5E1 !important;
+            padding: 8px 13px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            border-radius: 9px !important;
+            cursor: pointer !important;
+        }
+
+        .hc-btn-outline:hover {
+            background: #F8FAFC !important;
+        }
+
+        #askHelpStatus {
+            margin-top: 9px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            color: #172B4D !important;
+        }
+
+        #askHelpResults {
+            margin-top: 12px !important;
+            padding: 14px !important;
+            border-radius: 11px !important;
+            background: #F8FAFC !important;
+            border: 1px solid #CBD5E1 !important;
+        }
+
+        .ask-results-header {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 8px !important;
+            margin-bottom: 8px !important;
+        }
+
+        .ask-results-header strong {
+            color: #172B4D !important;
+            font-size: 12.5px !important;
+        }
+
+        .ask-result-item {
+            background: #FFFFFF !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 9px !important;
+            padding: 11px 13px !important;
+            margin-top: 8px !important;
+        }
+
+        .ask-result-item h4 {
+            margin: 0 0 5px !important;
+            font-size: 13px !important;
+            font-weight: 800 !important;
+            color: #172B4D !important;
+        }
+
+        .ask-result-item p {
+            margin: 0 !important;
+            font-size: 12.5px !important;
+            line-height: 1.55 !important;
+            color: #334155 !important;
+        }
+
+        .hc-diag-list {
+            display: grid !important;
+            gap: 10px !important;
+        }
+
+        .hc-diag-card {
+            background: #F8FAFC !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 11px !important;
+            padding: 12px 14px !important;
+        }
+
+        .hc-diag-tag {
+            display: inline-block !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.7px !important;
+            text-transform: uppercase !important;
+            color: #7D5B1C !important;
+            background: #F5EFE0 !important;
+            padding: 2px 7px !important;
+            border-radius: 5px !important;
+            margin-bottom: 5px !important;
+        }
+
+        .hc-diag-card h4 {
+            margin: 0 0 4px !important;
+            font-size: 13px !important;
+            font-weight: 800 !important;
+            color: #172B4D !important;
+        }
+
+        .hc-diag-card p {
+            margin: 0 !important;
+            font-size: 12.5px !important;
+            line-height: 1.55 !important;
+            color: #334155 !important;
+        }
+
+        /* DARK MODE OVERRIDES */
+        [data-theme="dark"] .ug-side-card,
+        [data-theme="dark"] .ug-step,
+        [data-theme="dark"] .hc-panel,
+        [data-theme="dark"] .hc-faq-item,
+        [data-theme="dark"] .ask-result-item {
+            background: #131C2E !important;
+            border-color: #2A3852 !important;
+        }
+
+        [data-theme="dark"] .ug-step[open],
+        [data-theme="dark"] .hc-faq-item[open] {
+            background: #172238 !important;
+            border-left-color: #D6B979 !important;
+        }
+
+        [data-theme="dark"] .ug-chapter-head,
+        [data-theme="dark"] .hc-tabs-bar {
+            border-color: #2A3852 !important;
+        }
+
+        [data-theme="dark"] .ug-chapter-head h3,
+        [data-theme="dark"] .ug-step summary,
+        [data-theme="dark"] .ug-step-body strong,
+        [data-theme="dark"] .ug-progress-label,
+        [data-theme="dark"] .hc-faq-item summary,
+        [data-theme="dark"] .hc-card-head h3,
+        [data-theme="dark"] .hc-diag-card h4,
+        [data-theme="dark"] .ask-result-item h4,
+        [data-theme="dark"] .ask-results-header strong,
+        [data-theme="dark"] #askHelpStatus {
+            color: #F8FAFC !important;
+        }
+
+        [data-theme="dark"] .ug-step-body ol,
+        [data-theme="dark"] .ug-step-body li,
+        [data-theme="dark"] .faq-body,
+        [data-theme="dark"] .faq-body p,
+        [data-theme="dark"] .hc-diag-card p,
+        [data-theme="dark"] .ask-result-item p,
+        [data-theme="dark"] .ug-meta-count,
+        [data-theme="dark"] .ug-side-title {
+            color: #CBD5E1 !important;
+        }
+
+        [data-theme="dark"] .ug-nav-btn,
+        [data-theme="dark"] .hc-tab,
+        [data-theme="dark"] .ug-ghost-btn,
+        [data-theme="dark"] .ug-jump-link,
+        [data-theme="dark"] .hc-btn-outline {
+            background: #1A253B !important;
+            color: #E2E8F0 !important;
+            border-color: #334155 !important;
+        }
+
+        [data-theme="dark"] .ug-nav-btn.active,
+        [data-theme="dark"] .hc-tab.active,
+        [data-theme="dark"] .hc-btn-primary {
+            background: #D6B979 !important;
+            color: #0F172A !important;
+            border-color: #D6B979 !important;
+        }
+
+        [data-theme="dark"] .ug-check-item,
+        [data-theme="dark"] .hc-diag-card,
+        [data-theme="dark"] #askHelpResults,
+        [data-theme="dark"] #askHelpInput,
+        [data-theme="dark"] .doc-search-input,
+        [data-theme="dark"] .ug-loc,
+        [data-theme="dark"] .ug-step-body code,
+        [data-theme="dark"] #view-help .faq-body code,
+        [data-theme="dark"] .hc-diag-card code {
+            background: #0F172A !important;
+            color: #F1F5F9 !important;
+            border-color: #334155 !important;
+        }
+
+        [data-theme="dark"] .doc-advisory {
+            background: #1B253A !important;
+            border-color: #334155 !important;
+            border-left-color: #D6B979 !important;
+            color: #E2E8F0 !important;
+        }
+
+        [data-theme="dark"] .doc-advisory strong {
+            color: #FDE68A !important;
+        }
+
+        [data-theme="dark"] .doc-tl-block {
+            border-top-color: #2A3852 !important;
+        }
+
+        /* TOPBAR ACCOUNT CONTROLS */
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .topbar-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .topbar-account {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            background: var(--card, #fff);
+            border: 1px solid var(--border, #e8e5dc);
+            border-radius: 13px;
+        }
+
+        .topbar-account-avatar {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 11px;
+            background: var(--gold-soft, #f8f2e5);
+            color: var(--heading, #172b4d);
+            font-weight: 800;
+        }
+
+        .topbar-account-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .topbar-account-info strong {
+            color: var(--text, #343a45);
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .topbar-account-info small {
+            color: var(--muted, #7d8793);
+            font-size: 10px;
+        }
+
+        .topbar-logout {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 10px 15px;
+            border: 1px solid rgba(199, 101, 101, 0.28);
+            border-radius: 12px;
+            background: var(--card, #fff);
+            color: var(--red, #b85454);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .topbar-logout:hover {
+            background: var(--red-soft, #f9eeee);
+            border-color: var(--red, #c76565);
+            transform: translateY(-1px);
+        }
+
+        .settings-about {
+            margin-top: 20px;
+        }
+
+        /* MULTIPLE SAVINGS GOALS */
+
+        .savings-goals-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .savings-goal-card {
+            padding: 18px;
+            border: 1px solid var(--border, #e3e7ed);
+            border-radius: 15px;
+            background: var(--card, #fff);
+        }
+
+        .savings-goal-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .savings-goal-card-header h3 {
+            margin: 0 0 5px;
+            color: var(--text, #172b4d);
+            font-size: 16px;
+        }
+
+        .savings-goal-card-header small {
+            color: var(--muted, #71818a);
+            font-size: 11px;
+        }
+
+        .savings-goal-card .savings-percent {
+            margin-bottom: 10px;
+        }
+
+        .savings-goal-card .progress-track {
+            margin: 10px 0;
+        }
+
+        .savings-goal-card .goal-amount-text {
+            margin-bottom: 15px;
+        }
+
+        .savings-goal-card-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .savings-goal-card-actions button {
+            flex: 1;
+            min-width: 90px;
+        }
+
+        .savings-goal-card .goal-contribution {
+            margin-top: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .topbar {
+                align-items: flex-start;
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+
+            .topbar-actions {
+                justify-content: flex-start;
+            }
+
+            .ug-layout,
+            .hc-support-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .ug-sidebar {
+                position: static !important;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .guide-grid,
+            .about-info-grid,
+            .feature-list {
+                grid-template-columns: 1fr !important;
+            }
+
+            .ug-step-body {
+                padding: 0 14px 14px 14px !important;
+            }
+
+            .doc-hero {
+                padding: 20px !important;
+            }
+
+            .topbar-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .topbar-account {
+                flex: 1;
+            }
+
+            .topbar-logout {
+                flex-shrink: 0;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .topbar-actions {
+                align-items: stretch;
+            }
+
+            .topbar-date {
+                width: 100%;
+            }
+
+            .topbar-account {
+                min-width: 0;
+            }
+
+            .topbar-logout {
+                padding: 9px 11px;
+            }
+
+            .savings-goal-card-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="background-decor decor-top"></div>
+<div class="background-decor decor-bottom"></div>
+
+<!-- ================= AUTHENTICATION SCREEN (LOGIN & REGISTER) ================= -->
+
+<section id="authScreen" class="auth-screen">
+    <div class="auth-shell">
+
+        <!-- LEFT SHOWCASE & UTILITIES -->
+        <aside class="auth-showcase">
+            <div class="auth-brand">
+                <div class="brand-mark">B</div>
+                <div>
+                    <h1>Badyetly</h1>
+                    <p>Track Your Pera Wisely</p>
+                </div>
+            </div>
+
+            <div class="auth-showcase-hero">
+                <span class="gold-line"></span>
+                <h2>Small steps today.<br><strong>Better finances tomorrow.</strong></h2>
+                <p>Organize your daily allowance, bills, budgets, and savings goals in one offline-ready personal finance app.</p>
+            </div>
+
+            <div class="auth-highlights">
+                <div class="auth-highlight-item">
+                    <span>⚡</span>
+                    <div>
+                        <strong>1-Tap Quick Expenses</strong>
+                        <small>Log daily spending and auto-categorize entries in seconds.</small>
+                    </div>
+                </div>
+                <div class="auth-highlight-item">
+                    <span>◷</span>
+                    <div>
+                        <strong>Monthly Insights & Budgets</strong>
+                        <small>Compare months and stay on top of recurring bills.</small>
+                    </div>
+                </div>
+                <div class="auth-highlight-item">
+                    <span>◇</span>
+                    <div>
+                        <strong>Goal Deadlines & Pace</strong>
+                        <small>See exact daily, weekly, and monthly saving targets.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loginRestoreSection" class="login-restore-box">
+                <div class="login-restore-header">
+                    <span class="login-restore-icon">📂</span>
+                    <div>
+                        <h3>Restore Your Backup</h3>
+                        <p>Recover your income, expenses, goals, and budgets from a <code>.json</code> backup file.</p>
+                    </div>
+                </div>
+
+                <input type="file" id="loginRestoreFile" accept=".json,application/json" style="display:none;">
+
+                <div class="login-restore-actions">
+                    <button type="button" id="loginRestoreButton" class="login-restore-btn">
+                        Restore Backup
+                    </button>
+                    <button type="button" id="tryDemoBtn" class="btn-outline auth-demo-btn" onclick="tryDemoAccount()">
+                        ✦ Try Demo Account
+                    </button>
+                </div>
+
+                <button type="button" id="loginCloudSyncBtn" class="btn-outline auth-cloud-btn" onclick="loginWithGoogleCloudSync()">
+                    ☁ Restore / Sync via Google Cloud
+                </button>
+            </div>
+        </aside>
+
+        <!-- RIGHT AUTH CARD -->
+        <div class="auth-card">
+
+            <div class="auth-top-controls">
+                <div class="auth-tabs" role="tablist" aria-label="Authentication mode">
+                    <button type="button" id="tabLoginBtn" class="auth-tab active" role="tab" aria-selected="true"
+                        onclick="showLogin()">Log In</button>
+                    <button type="button" id="tabRegisterBtn" class="auth-tab" role="tab" aria-selected="false"
+                        onclick="showRegister()">Create Account</button>
+                </div>
+
+                <div class="auth-utility-btns">
+                    <button type="button" id="pwaInstallAuthBtn" class="topbar-install-btn"
+                        style="display:none;" onclick="triggerPWAInstall()">
+                        <span>⇩</span>
+                        <span>Install</span>
+                    </button>
+                    <button type="button" class="theme-toggle-btn" data-theme-toggle
+                        onclick="toggleTheme()" aria-label="Toggle dark mode">☾ Dark</button>
+                </div>
+            </div>
+
+            <!-- LOGIN PANEL -->
+            <div id="loginScreen" class="auth-panel">
+                <div class="auth-heading">
+                    <span class="eyebrow">WELCOME BACK</span>
+                    <h2>Manage your money<br>with confidence.</h2>
+                    <p>Log in to continue managing your finances.</p>
+                </div>
+
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginName">Account Name</label>
+                        <div class="input-wrap">
+                            <span class="field-icon">♙</span>
+                            <input type="text" id="loginName"
+                                placeholder="Enter your account name"
+                                autocomplete="username" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPass">Password</label>
+                        <div class="input-wrap">
+                            <span class="field-icon">♧</span>
+                            <input type="password" id="loginPass"
+                                placeholder="Enter your password"
+                                autocomplete="current-password" required>
+                            <button type="button" class="password-toggle"
+                                onclick="togglePassword('loginPass', this)"
+                                aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+
+                    <div class="auth-options-row">
+                        <label class="remember-me-label" for="rememberMe">
+                            <input type="checkbox" id="rememberMe" checked>
+                            <span>Keep me logged in</span>
+                        </label>
+                        <button type="button" class="text-button"
+                            onclick="forgotPassword()">Forgot password?</button>
+                    </div>
+
+                    <p id="debug" class="form-message" aria-live="polite"></p>
+
+                    <button type="submit" class="btn-primary auth-submit">
+                        Log In <span>→</span>
+                    </button>
+                </form>
+
+                <div id="savedWrap" class="saved-wrap" style="display:none;">
+                    <p class="saved-title">SAVED ACCOUNTS (TAP TO SELECT)</p>
+                    <div id="savedAccounts" class="saved-accounts"></div>
+                    <button type="button" class="text-button delete-account-link"
+                        onclick="deleteAccountFromLogin()">Delete selected account</button>
+                </div>
+
+                <div class="auth-footer">
+                    <span>Don't have an account?</span>
+                    <button type="button" class="text-button"
+                        onclick="showRegister()">Create account</button>
+                </div>
+
+                <div class="auth-security">
+                    <span>✦</span> Your personal budget stays privately on your device.
+                </div>
+            </div>
+
+            <!-- REGISTER PANEL -->
+            <div id="registerScreen" class="auth-panel" style="display:none;">
+                <div class="auth-heading">
+                    <span class="eyebrow">GET STARTED</span>
+                    <h2>Create your<br>personal account.</h2>
+                    <p>Start building better money habits today.</p>
+                </div>
+
+                <form id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="registerName">Account Name</label>
+                        <div class="input-wrap">
+                            <span class="field-icon">♙</span>
+                            <input type="text" id="registerName"
+                                placeholder="Choose an account name"
+                                autocomplete="username" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPass">Password</label>
+                        <div class="input-wrap">
+                            <span class="field-icon">♧</span>
+                            <input type="password" id="registerPass"
+                                placeholder="At least 4 characters"
+                                autocomplete="new-password"
+                                oninput="updateRegisterValidationUI()" required>
+                            <button type="button" class="password-toggle"
+                                onclick="togglePassword('registerPass', this)"
+                                aria-label="Show password">Show</button>
+                        </div>
+                        <div id="passwordStrengthWrap" class="password-strength-wrap" style="display:none;">
+                            <div class="password-strength-track">
+                                <div id="passwordStrengthFill" class="password-strength-fill"></div>
+                            </div>
+                            <small id="passwordStrengthLabel" class="password-strength-label"></small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPass">Confirm Password</label>
+                        <div class="input-wrap">
+                            <span class="field-icon">♧</span>
+                            <input type="password" id="confirmPass"
+                                placeholder="Enter your password again"
+                                autocomplete="new-password"
+                                oninput="updateRegisterValidationUI()" required>
+                            <button type="button" class="password-toggle"
+                                onclick="togglePassword('confirmPass', this)"
+                                aria-label="Show password">Show</button>
+                        </div>
+                        <small id="passwordMatchHint" class="password-match-hint"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPin">4-Digit Recovery PIN (Optional)</label>
+                        <div class="input-wrap">
+                            <span class="field-icon">⚿</span>
+                            <input type="password" id="registerPin"
+                                inputmode="numeric" maxlength="4" pattern="\d{4}"
+                                placeholder="e.g. 1234 (protects password resets)"
+                                autocomplete="off">
+                            <button type="button" class="password-toggle"
+                                onclick="togglePassword('registerPin', this)"
+                                aria-label="Show recovery PIN">Show</button>
+                        </div>
+                    </div>
+
+                    <p id="registerDebug" class="form-message" aria-live="polite"></p>
+
+                    <button type="submit" class="btn-primary auth-submit">
+                        Create Account <span>→</span>
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <span>Already have an account?</span>
+                    <button type="button" class="text-button"
+                        onclick="showLogin()">Log in</button>
+                </div>
+
+                <div class="auth-security">
+                    <span>✦</span> Your financial journey starts here.
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= MAIN APPLICATION ================= -->
+
+<div id="appScreen" class="app-layout" style="display:none;">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-mark">B</div>
+            <div>
+                <h2>Badyetly</h2>
+                <small>PERSONAL FINANCE</small>
+            </div>
+        </div>
+
+        <div class="sidebar-label">MENU</div>
+
+        <nav class="nav-vertical">
+
+            <button id="nav-home" class="active" onclick="showView('home')">
+                <span class="nav-icon">⌂</span>
+                <span>Home</span>
+            </button>
+
+            <button id="nav-dashboard" onclick="showView('dashboard')">
+                <span class="nav-icon">▦</span>
+                <span>Transactions</span>
+            </button>
+
+            <button id="nav-analytics" onclick="showView('analytics')">
+                <span class="nav-icon">◷</span>
+                <span>Analytics</span>
+            </button>
+
+            <button id="nav-budget" onclick="showView('budget')">
+                <span class="nav-icon">▤</span>
+                <span>Budget Planner</span>
+            </button>
+
+            <button id="nav-goals" onclick="showView('goals')">
+                <span class="nav-icon">◇</span>
+                <span>Savings Goals</span>
+            </button>
+
+            <button id="nav-settings" onclick="showView('settings')">
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </button>
+
+            <div class="sidebar-label" style="margin-top:22px;">SUPPORT</div>
+
+            <button id="nav-guide" onclick="showView('guide')">
+                <span class="nav-icon">▣</span>
+                <span>User Guide</span>
+            </button>
+
+            <button id="nav-help" onclick="showView('help')">
+                <span class="nav-icon">?</span>
+                <span>Help Center</span>
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-user-card">
+                <div class="user-avatar">♙</div>
+                <div class="user-details">
+                    <strong id="sidebarUser">Logged in</strong>
+                    <small id="currentUserLabel">Personal Account</small>
+                </div>
+            </div>
+
+            <div id="sidebarDate" class="sidebar-date"></div>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div class="topbar-title-wrap">
+                <div class="brand-mark mobile-only-brand" aria-hidden="true">B</div>
+                <div>
+                    <p class="topbar-label">PERSONAL FINANCE DASHBOARD</p>
+                    <h1 id="welcomeText">Welcome to Badyetly!</h1>
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+
+                <button type="button" id="pwaInstallTopBtn" class="topbar-install-btn"
+                    style="display:none;" onclick="triggerPWAInstall()">
+                    <span>⇩</span>
+                    <span>Install App</span>
+                </button>
+
+                <button type="button" id="themeToggleBtn" class="theme-toggle-btn" data-theme-toggle
+                    onclick="toggleTheme()" aria-label="Toggle dark mode">☾ Dark</button>
+
+                <div class="topbar-date">
+                    <span class="date-icon">▦</span>
+                    <span id="todayDate"></span>
+                </div>
+
+                <div class="topbar-account">
+                    <div class="topbar-account-avatar">♙</div>
+                    <div class="topbar-account-info">
+                        <strong id="topbarUserName">My Account</strong>
+                        <small>Personal Account</small>
+                    </div>
+                </div>
+
+                <button type="button" class="topbar-logout" onclick="logout()">
+                    <span>↪</span>
+                    <span>Log Out</span>
+                </button>
+
+            </div>
+        </header>
+
+
+        <!-- ================= CONTEXTUAL BACK BAR ================= -->
+
+        <div id="viewBackBar" class="view-back-bar" style="display:none;" role="region" aria-label="Return navigation">
+            <button type="button" id="viewBackBtn" class="view-back-btn" onclick="goBackNav()">
+                <span aria-hidden="true">←</span>
+                <span id="viewBackLabel">Back to About Badyetly</span>
+            </button>
+            <div class="view-back-meta">
+                <span id="viewBackHint" class="view-back-hint">Shortcut return</span>
+                <button type="button" class="view-back-close" onclick="clearBackNav()" aria-label="Dismiss back bar">✕</button>
+            </div>
+        </div>
+
+
+        <!-- ================= HOME VIEW ================= -->
+
+        <section id="view-home" class="view active">
+
+            <div class="section-heading section-heading-wrap">
+                <div>
+                    <span class="eyebrow">OVERVIEW</span>
+                    <h2>Your Financial Summary</h2>
+                    <p id="homePeriodSubtitle">Showing all recorded transactions.</p>
+                </div>
+
+                <div class="period-controls">
+                    <button type="button" id="homeAllTimeBtn" class="btn-primary btn-small"
+                        onclick="setHomePeriod('all')">All Time</button>
+                    <button type="button" id="homeThisMonthBtn" class="btn-outline btn-small"
+                        onclick="setHomePeriod('current')">This Month</button>
+                    <input type="month" id="homeMonthPicker" class="month-picker-input"
+                        aria-label="Filter overview by month" onchange="setHomePeriod(this.value)">
+                </div>
+            </div>
+
+            <div class="stats-grid">
+
+                <article class="stat-card income-card">
+                    <div class="stat-top">
+                        <span class="stat-icon">↗</span>
+                        <span class="stat-label" id="hIncomeLabel">TOTAL INCOME</span>
+                    </div>
+                    <h3 id="hIncome">₱0.00</h3>
+                    <p id="hIncomeSub">Money coming in</p>
+                </article>
+
+                <article class="stat-card expense-card">
+                    <div class="stat-top">
+                        <span class="stat-icon">↘</span>
+                        <span class="stat-label" id="hExpenseLabel">TOTAL EXPENSES</span>
+                    </div>
+                    <h3 id="hExpense">₱0.00</h3>
+                    <p id="hExpenseSub">Money going out</p>
+                </article>
+
+                <article class="stat-card balance-card" id="homeBalanceCard">
+                    <div class="stat-top">
+                        <span class="stat-icon">◇</span>
+                        <span class="stat-label" id="hBalanceLabel">TOTAL BALANCE</span>
+                        <button type="button" id="balancePrivacyBtn" class="balance-eye-btn"
+                            onclick="toggleBalancePrivacy()" aria-label="Hide or show balance amounts"
+                            title="Hide or show balance amounts">Hide</button>
+                    </div>
+                    <h3 id="hBalance">₱0.00</h3>
+                    <p id="hBalanceSub">Your remaining money</p>
+                    <button type="button" id="startingBalanceBtn" class="balance-action-btn"
+                        onclick="setStartingBalance()" style="display:none;">+ Set Starting Balance</button>
+                </article>
+
+            </div>
+
+            <div id="homeBillsWidget" class="goal-widget" style="display:none;"></div>
+
+            <div id="homeGoalWidget" class="goal-widget" style="display:none;"></div>
+
+            <div class="content-grid">
+
+                <article class="panel recent-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">ACTIVITY</span>
+                            <h3>Recent Transactions</h3>
+                        </div>
+                        <button class="btn-outline btn-small"
+                            onclick="navigateFromShortcut('dashboard')">View All →</button>
+                    </div>
+
+                    <div class="filter-toolbar">
+                        <div class="filter-date-field">
+                            <label for="filterDate">Filter by date</label>
+                            <input type="date" id="filterDate">
+                        </div>
+
+                        <button class="btn-primary btn-small"
+                            onclick="applyDateFilter()">Apply</button>
+                        <button class="btn-outline btn-small"
+                            onclick="filterToday()">Today</button>
+                        <button class="btn-ghost btn-small"
+                            onclick="clearDateFilter()">Clear</button>
+                        <button id="clearFilterBtn" class="btn-ghost btn-small"
+                            style="display:none;" onclick="clearDateFilter()">× Clear Filter</button>
+                    </div>
+
+                    <div id="dailySummary" class="daily-summary" style="display:none;"></div>
+
+                    <div id="recentList" class="transaction-list">
+                        <p class="empty-message">No transactions yet.</p>
+                    </div>
+                </article>
+
+                <article class="panel quick-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">YOUR PROGRESS</span>
+                            <h3>Savings Goal</h3>
+                        </div>
+                        <span class="heading-icon">◇</span>
+                    </div>
+
+                    <div id="homeGoalPlaceholder" class="quick-placeholder">
+                        <div class="placeholder-icon">◇</div>
+                        <p>Your savings journey starts with a goal.</p>
+                        <button class="btn-primary btn-small"
+                            onclick="navigateFromShortcut('goals')">Set a Goal</button>
+                    </div>
+
+                    <div id="dashboardGoalWidget" class="goal-widget" style="display:none;"></div>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= TRANSACTIONS VIEW ================= -->
+
+        <section id="view-dashboard" class="view">
+
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">MONEY MANAGEMENT</span>
+                    <h2>Transactions</h2>
+                    <p>Record and organize your income and expenses.</p>
+                </div>
+            </div>
+
+            <div class="tx-filter-bar panel">
+                <div class="tx-filter-field tx-search-field">
+                    <label for="txSearchInput">Search Transactions</label>
+                    <input type="text" id="txSearchInput"
+                        placeholder="Search by item, source, or category..."
+                        oninput="renderAll()">
+                </div>
+                <div class="tx-filter-field tx-category-field">
+                    <label for="txCategoryFilter">Filter Category (Expenses)</label>
+                    <select id="txCategoryFilter" onchange="renderAll()">
+                        <option value="ALL">All Categories</option>
+                        <option value="Food & Drinks">Food & Drinks</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Skincare & Personal Care">Skincare & Personal Care</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills & Utilities">Bills & Utilities</option>
+                        <option value="Education">Education</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+                <div class="tx-filter-actions">
+                    <button type="button" class="btn-outline"
+                        onclick="openManageCategoriesModal()">+ Categories</button>
+                    <button type="button" class="btn-outline"
+                        onclick="clearTransactionFilters()">Reset</button>
+                </div>
+            </div>
+
+            <div class="content-grid transaction-entry-grid">
+
+                <article class="panel" id="incomeEntryPanel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">MONEY IN</span>
+                            <h3>Add Income</h3>
+                        </div>
+                        <span class="heading-icon income-icon">↗</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="incomeSource">Income Source</label>
+                        <input type="text" id="incomeSource"
+                            placeholder="e.g. Allowance, Salary">
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label for="incomeAmount">Amount (₱)</label>
+                            <input type="number" id="incomeAmount"
+                                min="0" step="0.01" placeholder="0.00">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="incomeDate">Date</label>
+                            <input type="date" id="incomeDate">
+                        </div>
+                    </div>
+
+                    <button class="btn-primary full-button"
+                        onclick="addIncome()">+ Add Income</button>
+
+                    <div id="incomeList" class="transaction-list compact-list">
+                        <p class="empty-message">No income yet.</p>
+                    </div>
+                </article>
+
+                <article class="panel" id="expenseEntryPanel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">MONEY OUT</span>
+                            <h3>Smart Expense Entry</h3>
+                        </div>
+                        <span class="heading-icon expense-icon">↘</span>
+                    </div>
+
+                    <div class="quick-chips-section">
+                        <div class="quick-chips-header">
+                            <span class="quick-chips-label">QUICK-ADD CHIPS (1-TAP)</span>
+                            <button type="button" class="btn-outline btn-small"
+                                onclick="openQuickChipModal()">+ Add Chip</button>
+                        </div>
+                        <div id="quickChipsList" class="quick-chips-list"></div>
+                    </div>
+
+                    <p class="helper-text">
+                        Enter one purchase per line. Badyetly will automatically detect its category.
+                    </p>
+
+                    <div class="form-group">
+                        <label for="expenseDate">Expense Date</label>
+                        <input type="date" id="expenseDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="smartExpenseInput">Your Expenses</label>
+                        <textarea id="smartExpenseInput" rows="4"
+                            placeholder="Rice - 50&#10;Coffee - 120&#10;Jeep fare - 25"></textarea>
+                    </div>
+
+                    <button class="btn-primary full-button"
+                        onclick="smartAddExpense()">✦ Add Expenses Automatically</button>
+
+                    <div id="smartPreview" class="smart-preview"></div>
+
+                    <div class="list-subheading">
+                        <h4>Expense History</h4>
+                    </div>
+
+                    <div id="expenseList" class="transaction-list compact-list">
+                        <p class="empty-message">No expenses yet.</p>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- RECURRING BILLS MANAGER -->
+
+            <article class="panel recurring-panel" id="recurringBillsPanel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="eyebrow">MONTHLY OBLIGATIONS</span>
+                        <h3>Recurring Bills & Subscriptions</h3>
+                    </div>
+                    <button type="button" class="btn-primary btn-small"
+                        onclick="openRecurringBillModal()">+ Add Bill</button>
+                </div>
+
+                <p class="helper-text">
+                    Track fixed monthly bills (e.g. WiFi, Rent, Kuryente) and log payment in one click.
+                </p>
+
+                <div id="recurringBillsList" class="recurring-bills-grid">
+                    <p class="empty-message">No recurring bills yet.</p>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- ================= ANALYTICS VIEW ================= -->
+
+        <section id="view-analytics" class="view">
+
+            <div class="section-heading section-heading-wrap">
+                <div>
+                    <span class="eyebrow">YOUR MONEY INSIGHTS</span>
+                    <h2>Analytics</h2>
+                    <p id="analyticsPeriodSubtitle">Understand your income, expenses, and savings progress.</p>
+                </div>
+
+                <div class="period-controls">
+                    <label for="analyticsMonthPicker" class="period-label">Month:</label>
+                    <input type="month" id="analyticsMonthPicker" class="month-picker-input"
+                        onchange="setReportMonth(this.value)">
+                    <button type="button" class="btn-outline btn-small"
+                        onclick="resetReportMonth()">Current Month</button>
+                    <button type="button" class="btn-primary btn-small"
+                        onclick="printMonthlyReport()">⎙ Print / Save PDF</button>
+                </div>
+            </div>
+
+            <div class="analytics-summary-grid">
+                <div class="analytics-stat-card">
+                    <small id="analyticsIncomeLabel">THIS MONTH'S INCOME</small>
+                    <strong id="analyticsIncome">₱0.00</strong>
+                    <p>Recorded income for selected month</p>
+                </div>
+                <div class="analytics-stat-card">
+                    <small id="analyticsExpenseLabel">THIS MONTH'S EXPENSES</small>
+                    <strong id="analyticsExpense">₱0.00</strong>
+                    <p>Recorded expenses for selected month</p>
+                </div>
+                <div class="analytics-stat-card">
+                    <small id="analyticsBalanceLabel">THIS MONTH'S BALANCE</small>
+                    <strong id="analyticsBalance">₱0.00</strong>
+                    <p>Income minus expenses</p>
+                </div>
+                <div class="analytics-stat-card">
+                    <small>TOP SPENDING CATEGORY</small>
+                    <strong id="analyticsTopCategory">No data</strong>
+                    <p id="analyticsTopAmount">No expenses recorded yet</p>
+                </div>
+            </div>
+
+            <div class="analytics-chart-grid">
+                <article class="analytics-chart-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">MONTHLY OVERVIEW</span>
+                            <h3>Income vs. Expenses</h3>
+                        </div>
+                        <span class="heading-icon">↕</span>
+                    </div>
+                    <div class="analytics-canvas-wrap">
+                        <canvas id="incomeExpenseChart" width="600" height="250"></canvas>
+                    </div>
+                    <div class="analytics-legend">
+                        <span><i style="background:#43866D"></i> Income</span>
+                        <span><i style="background:#C76565"></i> Expenses</span>
+                    </div>
+                </article>
+
+                <article class="analytics-chart-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">LAST SIX MONTHS</span>
+                            <h3>Monthly Spending Trends</h3>
+                        </div>
+                        <span class="heading-icon">⌁</span>
+                    </div>
+                    <div class="analytics-canvas-wrap">
+                        <canvas id="monthlyTrendChart" width="600" height="250"></canvas>
+                    </div>
+                    <div class="analytics-legend">
+                        <span><i style="background:#D6B979"></i> Monthly expenses</span>
+                    </div>
+                </article>
+            </div>
+
+            <div class="analytics-chart-grid">
+                <article class="analytics-chart-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">EXPENSE REPORT</span>
+                            <h3>Expenses by Category</h3>
+                        </div>
+                        <span class="heading-icon">◷</span>
+                    </div>
+                    <div class="analytics-canvas-wrap">
+                        <canvas id="catChart" width="600" height="230"></canvas>
+                    </div>
+                    <div class="breakdown-section">
+                        <h4>Category Breakdown</h4>
+                        <div id="catBreakdown">
+                            <p class="empty-message">No expense breakdown yet.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="analytics-chart-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">SAVINGS PROGRESS</span>
+                            <h3>Savings Analytics</h3>
+                        </div>
+                        <span class="heading-icon">◇</span>
+                    </div>
+                    <div id="analyticsSavings">
+                        <p class="empty-message">Set a savings goal to view your progress.</p>
+                    </div>
+                </article>
+            </div>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="eyebrow">BASED ON YOUR RECORDS</span>
+                        <h3>Smart Financial Insights</h3>
+                    </div>
+                    <span class="heading-icon">✦</span>
+                </div>
+                <div id="analyticsInsights" class="analytics-insights">
+                    <p class="empty-message">Add transactions to receive insights.</p>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- ================= BUDGET VIEW ================= -->
+
+        <section id="view-budget" class="view">
+
+            <div class="section-heading section-heading-wrap">
+                <div>
+                    <span class="eyebrow">SPEND WITH PURPOSE</span>
+                    <h2>Budget Planner</h2>
+                    <p>Set spending limits and keep track of your budget.</p>
+                </div>
+
+                <div class="period-controls">
+                    <label for="budgetMonthPicker" class="period-label">Month:</label>
+                    <input type="month" id="budgetMonthPicker" class="month-picker-input"
+                        onchange="setReportMonth(this.value)">
+                    <button type="button" class="btn-outline btn-small"
+                        onclick="resetReportMonth()">Current Month</button>
+                </div>
+            </div>
+
+            <div class="content-grid">
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">NEW LIMIT</span>
+                            <h3>Set a Budget</h3>
+                        </div>
+                        <span class="heading-icon">▤</span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-action-row">
+                            <label for="budgetCat">Category</label>
+                            <button type="button" class="text-button"
+                                onclick="openManageCategoriesModal()">+ Manage Categories</button>
+                        </div>
+                        <select id="budgetCat">
+                            <option value="Food & Drinks">Food & Drinks</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Skincare & Personal Care">Skincare & Personal Care</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Bills & Utilities">Bills & Utilities</option>
+                            <option value="Education">Education</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="budgetLimit">Budget Limit (₱)</label>
+                        <input type="number" id="budgetLimit"
+                            min="0" step="0.01" placeholder="Enter amount">
+                    </div>
+
+                    <button class="btn-primary full-button"
+                        onclick="setBudgetLimit()">+ Save Budget</button>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">MONTHLY SPENDING TRACKER</span>
+                            <h3>Your Budgets</h3>
+                        </div>
+                        <span class="heading-icon">◫</span>
+                    </div>
+
+                    <p id="budgetMonthLabel" class="helper-text">
+                        Tracking expenses for this month.
+                    </p>
+
+                    <div id="budgetList">
+                        <p class="empty-message">No budgets set yet.</p>
+                    </div>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= SAVINGS GOALS VIEW ================= -->
+
+        <section id="view-goals" class="view">
+
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">SAVE FOR WHAT MATTERS</span>
+                    <h2>Savings Goals</h2>
+                    <p>Make progress toward the things you want to achieve.</p>
+                </div>
+            </div>
+
+            <div class="content-grid">
+
+                <article class="panel" id="goalFormPanel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">YOUR NEXT MILESTONE</span>
+                            <h3 id="goalFormTitle">Create a Savings Goal</h3>
+                        </div>
+                        <span class="heading-icon">◇</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="savingsName">Goal Name</label>
+                        <input type="text" id="savingsName"
+                            placeholder="e.g. New Laptop">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="savingsTarget">Target Amount (₱)</label>
+                        <input type="number" id="savingsTarget"
+                            min="0" step="0.01" placeholder="Your target">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="savingsCurrent">Starting Savings (₱)</label>
+                        <input type="number" id="savingsCurrent"
+                            min="0" step="0.01" placeholder="0.00">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="savingsDeadline">Target Date (Optional)</label>
+                        <input type="date" id="savingsDeadline">
+                    </div>
+
+                    <div class="balance-link-box" style="margin-top:4px; margin-bottom:14px;">
+                        <label class="toggle-switch-row" for="savingsDeductBalance">
+                            <input type="checkbox" id="savingsDeductBalance">
+                            <span>Deduct this goal from Spendable Balance</span>
+                        </label>
+                        <small class="helper-text" style="margin:6px 0 0;">
+                            When checked, saved funds in this goal will be subtracted from your Spendable Balance on Home.
+                        </small>
+                    </div>
+
+                    <button type="button" id="createGoalBtn" class="btn-primary full-button"
+                        onclick="setSavings()">
+                        + Create Goal
+                    </button>
+
+                    <p id="goalHelperText" class="helper-text" style="margin-top:12px;">
+                        You can add multiple savings goals without losing your existing ones.
+                    </p>
+                </article>
+
+                <article class="panel savings-progress-panel">
+
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">YOUR PROGRESS</span>
+                            <h3>My Savings Goals</h3>
+                        </div>
+                        <span class="heading-icon">✧</span>
+                    </div>
+
+                    <div id="noGoal" class="quick-placeholder">
+                        <div class="placeholder-icon">◇</div>
+                        <p>No savings goals yet. Create your first goal to get started.</p>
+                    </div>
+
+                    <div id="savingsDisplay" class="savings-goals-list"
+                        style="display:none;">
+
+                        <div id="savingsGoalsList" class="savings-goals-list"></div>
+
+                        <button type="button" class="btn-outline full-button"
+                            onclick="focusAddGoalForm()">
+                            + Add More Goals
+                        </button>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= SETTINGS VIEW ================= -->
+
+        <section id="view-settings" class="view">
+
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">PREFERENCES & DATA</span>
+                    <h2>Settings</h2>
+                    <p>Manage your account, preferences, backups, and application details.</p>
+                </div>
+            </div>
+
+            <div class="settings-tabs" role="tablist" aria-label="Settings sections">
+                <button type="button" id="settingsTabPrefs" class="settings-tab-btn active"
+                    role="tab" aria-selected="true" onclick="setSettingsTab('preferences', { fromUserClick: true })">
+                    ⚙ Preferences &amp; Data
+                </button>
+                <button type="button" id="settingsTabAbout" class="settings-tab-btn"
+                    role="tab" aria-selected="false" onclick="setSettingsTab('about', { fromUserClick: true })">
+                    ⓘ About Badyetly
+                </button>
+            </div>
+
+            <div id="settingsPanelPrefs" class="settings-grid">
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">DATA MANAGEMENT</span>
+                            <h3>Backup &amp; Restore</h3>
+                        </div>
+                        <span class="heading-icon">⇩</span>
+                    </div>
+
+                    <div id="settingsDataSummary" class="settings-data-summary">
+                        0 Incomes · 0 Expenses · 0 Goals
+                    </div>
+
+                    <p class="helper-text">
+                        Keep a copy of your budget data or restore a previous backup.
+                    </p>
+
+                    <div class="settings-actions">
+                        <button type="button" class="btn-primary" onclick="backupData()">Download Backup</button>
+                        <button type="button" class="btn-outline" onclick="exportCSV()">Export CSV</button>
+                        <button type="button" class="btn-outline" onclick="printMonthlyReport()">⎙ Print / Save PDF</button>
+                    </div>
+
+                    <small id="lastBackupInfo" class="last-backup-note">
+                        No JSON backup downloaded yet.
+                    </small>
+
+                    <div class="restore-drop-box">
+                        <label for="importFile">Restore Backup File</label>
+                        <input type="file" id="importFile"
+                            accept=".json,application/json"
+                            style="display:none;"
+                            onchange="importBackup(event)">
+                        <button type="button" class="btn-outline full-button" onclick="triggerImportBackup()">
+                            📂 Upload &amp; Restore .json Backup
+                        </button>
+                        <small>Select a previously exported Badyetly <code>.json</code> file to restore this account.</small>
+                    </div>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">PROFILE &amp; SECURITY</span>
+                            <h3>Account, Password &amp; PIN</h3>
+                        </div>
+                        <span class="heading-icon">♧</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="renameAccountInput">Account Display Name</label>
+                        <div class="rename-account-row">
+                            <input type="text" id="renameAccountInput" maxlength="100"
+                                placeholder="Enter new account name">
+                            <button type="button" class="btn-outline" onclick="renameCurrentAccount()">
+                                Rename
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-divider">
+                        <div class="form-group">
+                            <label for="newPass">New Password</label>
+                            <div class="input-wrap input-wrap-no-icon">
+                                <input type="password" id="newPass"
+                                    placeholder="At least 4 characters">
+                                <button type="button" class="password-toggle"
+                                    onclick="togglePassword('newPass', this)"
+                                    aria-label="Show password">Show</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmNewPass">Confirm New Password</label>
+                            <div class="input-wrap input-wrap-no-icon">
+                                <input type="password" id="confirmNewPass"
+                                    placeholder="Re-enter new password">
+                                <button type="button" class="password-toggle"
+                                    onclick="togglePassword('confirmNewPass', this)"
+                                    aria-label="Show password">Show</button>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-primary full-button"
+                            onclick="changePassword()">Update Password</button>
+                    </div>
+
+                    <div class="form-group settings-divider">
+                        <label for="settingsRecoveryPin">4-Digit Recovery PIN</label>
+                        <div class="input-wrap input-wrap-no-icon">
+                            <input type="password" id="settingsRecoveryPin" inputmode="numeric" maxlength="4"
+                                placeholder="Enter 4 digits (e.g. 1234)">
+                            <button type="button" class="password-toggle"
+                                onclick="togglePassword('settingsRecoveryPin', this)"
+                                aria-label="Show password">Show</button>
+                        </div>
+                        <small id="recoveryPinStatus" class="helper-text" style="margin:4px 0 0;">
+                            Protects password resets on this account.
+                        </small>
+                    </div>
+
+                    <button type="button" class="btn-outline full-button"
+                        onclick="updateRecoveryPin()">Save Recovery PIN</button>
+                </article>
+
+                <article class="panel" id="settingsAppearancePanel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">DISPLAY &amp; PRIVACY</span>
+                            <h3>Appearance &amp; Defaults</h3>
+                        </div>
+                        <span class="heading-icon">☾</span>
+                    </div>
+
+                    <p class="helper-text" id="themeStatusText">
+                        Currently using Light Mode (Midnight Luxe). Switch to Dark Mode for comfortable night viewing.
+                    </p>
+
+                    <div class="settings-actions">
+                        <button type="button" id="settingsThemeBtn" class="btn-primary" onclick="toggleTheme()">
+                            Switch to Dark Mode
+                        </button>
+                    </div>
+
+                    <div class="settings-pref-stack">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label for="prefDefaultHomePeriod">Default Home View Period</label>
+                            <select id="prefDefaultHomePeriod" onchange="setDefaultHomePeriodPref(this.value)">
+                                <option value="all">All Time (Full History)</option>
+                                <option value="this_month">This Month Only</option>
+                            </select>
+                        </div>
+
+                        <div class="balance-link-box" style="margin-top:0;">
+                            <label class="toggle-switch-row" for="prefHideBalanceDefault">
+                                <input type="checkbox" id="prefHideBalanceDefault"
+                                    onchange="setHideBalanceDefaultPref(this.checked)">
+                                <span>Hide balance (₱•••••) by default on open</span>
+                            </label>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">TRANSACTIONS &amp; BUDGETS</span>
+                            <h3>Categories &amp; Quick Tools</h3>
+                        </div>
+                        <span class="heading-icon">▤</span>
+                    </div>
+
+                    <p class="helper-text" id="settingsCategoriesSummary">
+                        Manage custom expense categories and 1-tap quick-add expense chips.
+                    </p>
+
+                    <div class="settings-actions">
+                        <button type="button" class="btn-primary" onclick="openManageCategoriesModal()">
+                            + Custom Categories
+                        </button>
+                        <button type="button" class="btn-outline" onclick="openQuickChipModal()">
+                            ⚡ Add Quick-Add Chip
+                        </button>
+                    </div>
+                </article>
+
+                <article class="panel" id="settingsPwaCard">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">INSTALL &amp; OFFLINE APP</span>
+                            <h3>App Mode (PWA)</h3>
+                        </div>
+                        <span class="heading-icon">⇩</span>
+                    </div>
+
+                    <p class="helper-text" id="pwaStatusText">
+                        Install Badyetly on your phone or desktop so it opens like a native app and works offline.
+                    </p>
+
+                    <div class="settings-actions" style="align-items:center;">
+                        <span id="pwaStatusBadge" class="pwa-status-badge">Browser Mode</span>
+                        <button type="button" id="pwaInstallSettingsBtn" class="btn-primary"
+                            style="display:none;" onclick="triggerPWAInstall()">
+                            ⇩ Install Badyetly
+                        </button>
+                    </div>
+                </article>
+
+                <article class="panel" id="settingsCloudSyncCard">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">CROSS-DEVICE BACKUP</span>
+                            <h3>Cloud Sync (Google)</h3>
+                        </div>
+                        <span class="heading-icon">☁</span>
+                    </div>
+
+                    <p class="helper-text" id="cloudSyncStatusText">
+                        Connect your Google account to back up and sync your Badyetly records across devices.
+                    </p>
+
+                    <div id="cloudSyncUserMeta" class="cloud-sync-user" style="display:none;"></div>
+
+                    <div class="settings-actions" style="align-items:center;">
+                        <span id="cloudSyncBadge" class="pwa-status-badge">Local Only</span>
+                        <button type="button" id="cloudSyncSignInBtn" class="btn-primary"
+                            onclick="cloudSyncSignIn()">
+                            ☁ Sign in with Google
+                        </button>
+                        <button type="button" id="cloudSyncNowBtn" class="btn-primary"
+                            style="display:none;" onclick="syncNowWithCloud()">
+                            ↻ Sync Now
+                        </button>
+                        <button type="button" id="cloudSyncPullBtn" class="btn-outline"
+                            style="display:none;" onclick="pullCloudToLocal(true)">
+                            ⇩ Download Cloud
+                        </button>
+                        <button type="button" id="cloudSyncSignOutBtn" class="btn-outline"
+                            style="display:none;" onclick="cloudSyncSignOut()">
+                            Disconnect
+                        </button>
+                    </div>
+
+                    <div id="cloudSyncFileNotice" class="cloud-file-notice" style="display:none;">
+                        <strong>Local File Mode (<code>file://</code>):</strong> Browsers block Google Sign-In popups when opening HTML files directly from a folder. Use <strong>Download Backup (.json)</strong> here, or open Badyetly via Live Server / hosted web URL to use Google Cloud Sync.
+                    </div>
+                </article>
+
+                <article class="panel danger-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">CAUTION</span>
+                            <h3>Danger Zone</h3>
+                        </div>
+                        <span class="heading-icon danger-icon">!</span>
+                    </div>
+
+                    <p class="helper-text">
+                        These actions permanently remove information. Make a backup first if you may need your data later.
+                    </p>
+
+                    <div class="settings-actions">
+                        <button type="button" class="btn-danger-outline"
+                            onclick="clearAll()">Clear All Account Data</button>
+
+                        <button type="button" class="btn-danger"
+                            onclick="deleteCurrentAccount()">Delete Current Account</button>
+                    </div>
+                </article>
+
+            </div>
+
+            <div id="settingsPanelAbout" class="settings-about" style="display:none;">
+
+                <div class="about-banner">
+                    <span class="about-version-pill">VERSION 3.0 · PWA</span>
+                    <div class="about-logo">B</div>
+                    <h2>Badyetly</h2>
+                    <p>Track Your Pera Wisely · Make Every Peso Count.</p>
+
+                    <div class="about-hero-actions">
+                        <button type="button" class="about-hero-btn about-hero-btn-gold" onclick="navigateFromShortcut('guide')">
+                            ▣ Open User Guide
+                        </button>
+                        <button type="button" class="about-hero-btn" onclick="navigateFromShortcut('help')">
+                            ? Help Center &amp; FAQ
+                        </button>
+                        <button type="button" class="about-hero-btn" onclick="navigateFromShortcut('settings', 'preferences')">
+                            ⚙ Preferences &amp; Backup
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-grid about-overview-grid">
+
+                    <article class="panel">
+                        <div class="panel-heading">
+                            <div>
+                                <span class="eyebrow">SYSTEM OVERVIEW</span>
+                                <h3>What is Badyetly?</h3>
+                            </div>
+                            <span class="heading-icon">ⓘ</span>
+                        </div>
+
+                        <p class="about-description">
+                            Badyetly is a personal budget tracking web application designed to help users organize and monitor their financial activities. It provides tools for recording income and expenses, setting budget limits, tracking savings goals, and viewing spending summaries.
+                        </p>
+
+                        <p class="about-description" style="margin-top:10px;">
+                            Its goal is to make personal money management more organized, understandable, and convenient through a simple digital platform.
+                        </p>
+                    </article>
+
+                    <article class="panel">
+                        <div class="panel-heading">
+                            <div>
+                                <span class="eyebrow">OUR PURPOSE</span>
+                                <h3>Purpose of the System</h3>
+                            </div>
+                            <span class="heading-icon">◇</span>
+                        </div>
+
+                        <p class="about-description">
+                            Badyetly aims to help users become more aware of their spending habits and manage their available money. Through organized records and visual summaries, users can make more informed budgeting and saving decisions.
+                        </p>
+
+                        <div class="about-pillars">
+                            <div class="about-pillar">
+                                <strong>Private by Default</strong>
+                                <small>Records stay on your device</small>
+                            </div>
+                            <div class="about-pillar">
+                                <strong>Offline-Ready</strong>
+                                <small>Installable PWA support</small>
+                            </div>
+                            <div class="about-pillar">
+                                <strong>Visual Clarity</strong>
+                                <small>Charts &amp; printable PDFs</small>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+                <article class="panel" style="margin-top:18px;">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">APPLICATION FEATURES</span>
+                            <h3>What Badyetly Offers</h3>
+                        </div>
+                        <span class="heading-icon">✧</span>
+                    </div>
+
+                    <p class="helper-text" style="margin-top:-8px;margin-bottom:14px;">
+                        Click any feature card below to jump straight to that section.
+                    </p>
+
+                    <div class="feature-list">
+                        <button type="button" class="feature-item feature-item-btn" onclick="navigateFromShortcut('dashboard', null, '#incomeEntryPanel')">
+                            <span class="feature-icon-box" aria-hidden="true">↗</span>
+                            <span class="feature-item-body">
+                                <strong>Income &amp; Date Tracking</strong>
+                                <small>Log salaries, allowances &amp; starting balances by date</small>
+                            </span>
+                            <span class="feature-item-arrow" aria-hidden="true">›</span>
+                        </button>
+
+                        <button type="button" class="feature-item feature-item-btn" onclick="navigateFromShortcut('dashboard', null, '#expenseEntryPanel')">
+                            <span class="feature-icon-box" aria-hidden="true">↘</span>
+                            <span class="feature-item-body">
+                                <strong>Smart Expense &amp; 1-Tap Chips</strong>
+                                <small>Auto-categorized entries and instant favorite chips</small>
+                            </span>
+                            <span class="feature-item-arrow" aria-hidden="true">›</span>
+                        </button>
+
+                        <button type="button" class="feature-item feature-item-btn" onclick="navigateFromShortcut('dashboard', null, '#recurringBillsPanel')">
+                            <span class="feature-icon-box" aria-hidden="true">✦</span>
+                            <span class="feature-item-body">
+                                <strong>Recurring Monthly Bills</strong>
+                                <small>Track due dates and mark monthly bills paid in one click</small>
+                            </span>
+                            <span class="feature-item-arrow" aria-hidden="true">›</span>
+                        </button>
+
+                        <button type="button" class="feature-item feature-item-btn" onclick="navigateFromShortcut('analytics')">
+                            <span class="feature-icon-box" aria-hidden="true">◷</span>
+                            <span class="feature-item-body">
+                                <strong>Monthly Analytics &amp; PDF Report</strong>
+                                <small>Visual spending charts, comparisons &amp; printable PDF</small>
+                            </span>
+                            <span class="feature-item-arrow" aria-hidden="true">›</span>
+                        </button>
+
+                        <button type="button" class="feature-item feature-item-btn" onclick="navigateFromShortcut('budget')">
+                            <span class="feature-icon-box" aria-hidden="true">▤</span>
+                            <span class="feature-item-body">
+                                <strong>Budget Planner &amp; Custom Categories</strong>
+                                <small>Monthly spending caps with custom icons &amp; keywords</small>
+                            </span>
+                            <span class="feature-item-arrow" aria-hidden="true">›</span>
+                        </button>
+
+                        <button type="button" class="feature-item feature-item-btn" onclick="navigateFromShortcut('goals')">
+                            <span class="feature-icon-box" aria-hidden="true">◇</span>
+                            <span class="feature-item-body">
+                                <strong>Goal Deadlines &amp; Pace</strong>
+                                <small>Multiple savings goals with target dates &amp; monthly pace</small>
+                            </span>
+                            <span class="feature-item-arrow" aria-hidden="true">›</span>
+                        </button>
+
+                        <button type="button" class="feature-item feature-item-btn" onclick="navigateFromShortcut('settings', 'preferences', '#settingsAppearancePanel')">
+                            <span class="feature-icon-box" aria-hidden="true">☾</span>
+                            <span class="feature-item-body">
+                                <strong>Light &amp; Midnight Dark Mode</strong>
+                                <small>Switch themes, privacy mode &amp; account preferences</small>
+                            </span>
+                            <span class="feature-item-arrow" aria-hidden="true">›</span>
+                        </button>
+
+                        <button type="button" class="feature-item feature-item-btn" onclick="navigateFromShortcut('settings', 'preferences', '#settingsPwaCard')">
+                            <span class="feature-icon-box" aria-hidden="true">☁</span>
+                            <span class="feature-item-body">
+                                <strong>Offline PWA &amp; Cloud Sync</strong>
+                                <small>Installable app with local backups &amp; Google Cloud Sync</small>
+                            </span>
+                            <span class="feature-item-arrow" aria-hidden="true">›</span>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="panel" style="margin-top:18px;">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">RELEASE HIGHLIGHTS</span>
+                            <h3>What's New in v3.0</h3>
+                        </div>
+                        <span class="heading-icon">✦</span>
+                    </div>
+
+                    <div class="about-whats-new-grid">
+                        <div class="about-release-item">
+                            <span class="about-release-tag">SECURITY</span>
+                            <strong>4-Digit Recovery PIN</strong>
+                            <p>Protect password resets and recover your personal account safely offline.</p>
+                        </div>
+
+                        <div class="about-release-item">
+                            <span class="about-release-tag">SPEED</span>
+                            <strong>1-Tap Expense Chips &amp; Custom Categories</strong>
+                            <p>Log frequent purchases fast and personalize categories with custom icons.</p>
+                        </div>
+
+                        <div class="about-release-item">
+                            <span class="about-release-tag">PLANNING</span>
+                            <strong>Recurring Bills &amp; Goal Pace</strong>
+                            <p>Stay ahead of monthly due dates and see how much to save each month.</p>
+                        </div>
+
+                        <div class="about-release-item">
+                            <span class="about-release-tag">REPORTS</span>
+                            <strong>JSON, CSV &amp; Printable PDF Reports</strong>
+                            <p>Export clean monthly financial statements or keep encrypted-ready local backups.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel" style="margin-top:18px;">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="eyebrow">SYSTEM INFORMATION</span>
+                            <h3>Application Details</h3>
+                        </div>
+                        <span class="heading-icon">ⓘ</span>
+                    </div>
+
+                    <div class="about-info-grid">
+                        <div class="about-info">
+                            <small>VERSION &amp; BUILD</small>
+                            <strong>Version 3.0 (PWA)</strong>
+                        </div>
+
+                        <div class="about-info">
+                            <small>DEVELOPER</small>
+                            <strong>April Amador</strong>
+                        </div>
+
+                        <div class="about-info">
+                            <small>STORAGE &amp; SYNC</small>
+                            <strong id="aboutStorageStatus">Local Device Storage</strong>
+                        </div>
+
+                        <div class="about-info">
+                            <small>SAVED RECORDS</small>
+                            <strong id="aboutRecordsCount">0 Incomes · 0 Expenses · 0 Goals</strong>
+                        </div>
+
+                        <div class="about-info">
+                            <small>OFFLINE / APP MODE</small>
+                            <strong id="aboutAppMode">Browser Mode (Offline Ready)</strong>
+                        </div>
+
+                        <div class="about-info">
+                            <small>LAST JSON BACKUP</small>
+                            <strong id="aboutLastBackup">Not backed up yet</strong>
+                        </div>
+                    </div>
+
+                    <div class="guide-note">
+                        <strong>Data Information:</strong>
+                        Badyetly stores your budget records privately on your device for offline access, with optional Google Cloud Sync and downloadable JSON/CSV/PDF reports.
+                    </div>
+
+                    <p class="about-copyright">
+                        © 2026 Badyetly · Developed by April Amador
+                    </p>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= USER GUIDE VIEW ================= -->
+
+        <section id="view-guide" class="view" data-doc-lang="both">
+
+            <div class="doc-hero">
+                <div class="doc-hero-top">
+                    <div>
+                        <span class="doc-eyebrow">DOCUMENTATION · BADYETLY V3.0</span>
+                        <h2>User Guide</h2>
+                        <p class="doc-hero-sub">
+                            <span class="doc-en-i">Structured, step-by-step documentation for every feature — organized by workflow stage.</span>
+                            <span class="doc-tl-i"> Maayos at sunod-sunod na gabay sa bawat feature ng Badyetly.</span>
+                        </p>
+                    </div>
+                    <div class="doc-lang-switch" id="ugLangTabs" role="group" aria-label="Guide language">
+                        <button type="button" class="doc-lang-btn active" onclick="ugSetLang('both', this)">EN + TL</button>
+                        <button type="button" class="doc-lang-btn" onclick="ugSetLang('en', this)">English</button>
+                        <button type="button" class="doc-lang-btn" onclick="ugSetLang('tl', this)">Tagalog</button>
+                    </div>
+                </div>
+
+                <div class="doc-hero-search">
+                    <div class="doc-search-box">
+                        <span class="doc-search-icon" aria-hidden="true">⌕</span>
+                        <input type="text" id="ugSearchInput" class="doc-search-input"
+                            placeholder="Search documentation (e.g. backup, smart entry, pin, recurring bills, goal)..."
+                            oninput="ugFilter()">
+                    </div>
+                    <button type="button" class="doc-hero-btn" onclick="ugClearSearch()">Clear</button>
+                    <button type="button" id="ugExpandBtn" class="doc-hero-btn doc-hero-btn-gold" onclick="ugToggleAll()">Expand All</button>
+                </div>
+            </div>
+
+            <div class="ug-layout">
+
+                <!-- LEFT DOCUMENTATION RAIL -->
+                <aside class="ug-sidebar">
+                    <div class="ug-side-card">
+                        <p class="ug-side-title">Chapters</p>
+                        <div class="ug-nav-list" id="ugPhaseTabs">
+                            <button type="button" class="ug-nav-btn active" onclick="ugSetPhase('all', this)">
+                                <span>All Chapters</span>
+                                <span class="ug-nav-badge">10</span>
+                            </button>
+                            <button type="button" class="ug-nav-btn" onclick="ugSetPhase('setup', this)">
+                                <span>01 · Getting Started</span>
+                                <span class="ug-nav-badge">2</span>
+                            </button>
+                            <button type="button" class="ug-nav-btn" onclick="ugSetPhase('daily', this)">
+                                <span>02 · Daily Tracking</span>
+                                <span class="ug-nav-badge">3</span>
+                            </button>
+                            <button type="button" class="ug-nav-btn" onclick="ugSetPhase('plan', this)">
+                                <span>03 · Planning &amp; Reports</span>
+                                <span class="ug-nav-badge">3</span>
+                            </button>
+                            <button type="button" class="ug-nav-btn" onclick="ugSetPhase('safety', this)">
+                                <span>04 · Backup &amp; Security</span>
+                                <span class="ug-nav-badge">2</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="ug-side-card">
+                        <div class="ug-progress-row">
+                            <p class="ug-side-title" style="margin:0 !important;">Quick-Start Checklist</p>
+                            <span id="ugCheckCount" class="ug-progress-label">0 / 4</span>
+                        </div>
+                        <div class="ug-progress-track">
+                            <div id="ugCheckBar" class="ug-progress-fill"></div>
+                        </div>
+                        <div class="ug-check-list">
+                            <label class="ug-check-item">
+                                <input type="checkbox" data-ug-check="acc" onchange="ugToggleCheck()">
+                                <span><span class="doc-en-i">Create or restore account</span><span class="doc-tl-i"> (Account ready)</span></span>
+                            </label>
+                            <label class="ug-check-item">
+                                <input type="checkbox" data-ug-check="inc" onchange="ugToggleCheck()">
+                                <span><span class="doc-en-i">Set starting balance / income</span><span class="doc-tl-i"> (Kita / Balance)</span></span>
+                            </label>
+                            <label class="ug-check-item">
+                                <input type="checkbox" data-ug-check="exp" onchange="ugToggleCheck()">
+                                <span><span class="doc-en-i">Log first expense entry</span><span class="doc-tl-i"> (Unang gastos)</span></span>
+                            </label>
+                            <label class="ug-check-item">
+                                <input type="checkbox" data-ug-check="bkp" onchange="ugToggleCheck()">
+                                <span><span class="doc-en-i">Download .json backup</span><span class="doc-tl-i"> (May backup)</span></span>
+                            </label>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- RIGHT DOCUMENTATION CONTENT -->
+                <div class="ug-main">
+                    <div class="ug-toolbar">
+                        <span id="ugStepCounter" class="ug-meta-count">Showing 10 of 10 topics</span>
+                        <button type="button" class="ug-ghost-btn" onclick="ugClearSearch()">Reset Filters</button>
+                    </div>
+
+                    <div class="ug-chapter" data-ug-phase="setup">
+                        <div class="ug-chapter-head">
+                            <h3>01 · Getting Started</h3>
+                            <span class="ug-chapter-tag">Account &amp; Home</span>
+                        </div>
+
+                        <details class="ug-step" open>
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">01</span><span>Account Setup, Recovery PIN &amp; Backup Restore</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Login Screen &rarr; Create Account / Restore Backup</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Open <strong>Create Account</strong>, enter your account name, password (4+ characters), and an optional <strong>4-digit Recovery PIN</strong>.</li>
+                                        <li>To recover an existing profile, click <strong>Restore Backup</strong> on the login screen and select your <code>.json</code> file.</li>
+                                        <li>Use <strong>Try Demo Account</strong> anytime to preview sample finances safely.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Piliin ang <strong>Create Account</strong>, ilagay ang pangalan, password, at optional na 4-digit Recovery PIN.</li>
+                                        <li>Kung may lumang <code>.json</code> backup file ka, i-click ang <strong>Restore Backup</strong> para maibalik agad ang iyong records.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('settings', 'preferences')">Open Account Settings &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="ug-step">
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">02</span><span>Home Dashboard &amp; Balance Privacy</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Sidebar &rarr; Home</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Review <strong>Total Income</strong>, <strong>Total Expenses</strong>, and <strong>Total Balance</strong> filtered by <em>All Time</em>, <em>This Month</em>, or a custom month.</li>
+                                        <li>Click <strong>Hide</strong> on the Balance card to mask figures as <code>₱•••••</code> in public spaces.</li>
+                                        <li>Use the date toolbar under <strong>Recent Transactions</strong> or tap <strong>Today</strong> for daily totals.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Makikita sa Home ang kabuuang kita, gastos, at natitirang balance (All Time o This Month).</li>
+                                        <li>Pindutin ang <strong>Hide</strong> para gawing <code>₱•••••</code> ang balance kapag may ibang nakatingin.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('home')">Open Home &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ug-chapter" data-ug-phase="daily">
+                        <div class="ug-chapter-head">
+                            <h3>02 · Daily Money Tracking</h3>
+                            <span class="ug-chapter-tag">Income, Expenses &amp; Bills</span>
+                        </div>
+
+                        <details class="ug-step">
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">03</span><span>Recording Income &amp; Allowances</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Sidebar &rarr; Transactions &rarr; Add Income</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Enter the income source (e.g., <em>Salary</em>, <em>Allowance</em>), amount, and date.</li>
+                                        <li>Click <strong>+ Add Income</strong>. Entries can be edited or removed anytime from the list below.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Ilagay ang pinagmulan ng pera (hal. Sahod, Allowance), halaga, at petsa, tapos i-click ang <strong>+ Add Income</strong>.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('dashboard', null, '#incomeEntryPanel')">Go to Add Income &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="ug-step">
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">04</span><span>1-Tap Quick Chips, Smart Entry &amp; #Tags</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Sidebar &rarr; Transactions &rarr; Smart Expense Entry</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Tap a <strong>Quick-Add Chip</strong> to log frequent items in a single click, or create custom chips via <strong>+ Add Chip</strong>.</li>
+                                        <li>Type multiple lines in Smart Entry (e.g., <code>Rice - 50</code>, <code>Jeep - 25</code>) for automatic keyword categorization.</li>
+                                        <li>Append <code>#CategoryName</code> to override or assign custom categories manually.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Isang pindot sa <strong>Quick-Add Chip</strong> para sa madalas na gastos, o mag-type ng maramihang linya gaya ng <code>Kanin - 50</code> para kusang maikategorya.</li>
+                                        <li>Maglagay ng <code>#CategoryName</code> sa dulo kung gusto mong ikaw ang pumili ng kategorya.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('dashboard', null, '#expenseEntryPanel')">Open Smart Entry &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="ug-step">
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">05</span><span>Recurring Bills &amp; Transaction Filtering</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Sidebar &rarr; Transactions &rarr; Recurring Bills</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Register fixed obligations (WiFi, Rent, Utilities) under <strong>Recurring Bills</strong> and click <strong>Log Payment</strong> monthly.</li>
+                                        <li>Use the top search bar and category dropdown to filter historical transactions instantly.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Ilagay sa <strong>Recurring Bills</strong> ang regular na bayarin (WiFi, Renta, Kuryente) at i-click ang <strong>Log Payment</strong> kapag bayad na.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('dashboard', null, '#recurringBillsPanel')">Manage Bills &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ug-chapter" data-ug-phase="plan">
+                        <div class="ug-chapter-head">
+                            <h3>03 · Financial Planning &amp; Reports</h3>
+                            <span class="ug-chapter-tag">Analytics, Budgets &amp; Goals</span>
+                        </div>
+
+                        <details class="ug-step">
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">06</span><span>Monthly Analytics &amp; Printable PDF Reports</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Sidebar &rarr; Analytics</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Inspect Income vs. Expenses, 6-month spending trends, and category breakdowns for any selected month.</li>
+                                        <li>Click <strong>Print / Save PDF</strong> to generate a clean monthly financial statement.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Makikita sa Analytics ang charts at top spending category mo. Pindutin ang <strong>Print / Save PDF</strong> para mag-save ng buwanang report.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('analytics')">Open Analytics &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="ug-step">
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">07</span><span>Category Budgets &amp; Spending Caps</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Sidebar &rarr; Budget Planner</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Select an expense category, specify a monthly spending limit, and click <strong>+ Save Budget</strong>.</li>
+                                        <li>Switch months at the top to compare past spending against your target limits.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Pumili ng kategorya at ilagay ang budget limit bawat buwan. Kusang lalabas ang progress bar kung malapit ka nang lumagpas.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('budget')">Open Budget Planner &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="ug-step">
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">08</span><span>Savings Goals &amp; Target Pace Calculator</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Sidebar &rarr; Savings Goals</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Create multiple goals with an optional <strong>Target Date</strong> to view exact daily, weekly, and monthly saving pace.</li>
+                                        <li>Enable <strong>Deduct this goal from Spendable Balance</strong> to separate saved funds from spendable cash on Home.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Maglagay ng goal name, target amount, at optional Target Date para makita ang kailangang ipon araw-araw o buwan-buwan.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('goals')">Open Savings Goals &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="ug-chapter" data-ug-phase="safety">
+                        <div class="ug-chapter-head">
+                            <h3>04 · Backup, Security &amp; Sync</h3>
+                            <span class="ug-chapter-tag">Data Protection</span>
+                        </div>
+
+                        <details class="ug-step">
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">09</span><span>JSON Backups, Restore &amp; CSV Export</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Sidebar &rarr; Settings &rarr; Backup &amp; Restore</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Click <strong>Download Backup</strong> regularly to save a portable <code>.json</code> snapshot of your entire profile.</li>
+                                        <li>Use <strong>Upload &amp; Restore .json Backup</strong> to recover records, or <strong>Export CSV</strong> for Excel and Google Sheets.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Laging mag-<strong>Download Backup (.json)</strong> bago mag-clear ng browser cache. Gamitin ang <strong>Upload &amp; Restore</strong> para maibalik ang data anytime.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('settings', 'preferences')">Open Backup Settings &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="ug-step">
+                            <summary>
+                                <span class="ug-step-left"><span class="ug-num">10</span><span>Theme, Offline PWA &amp; Google Cloud Sync</span></span>
+                                <span class="ug-chev">›</span>
+                            </summary>
+                            <div class="ug-step-body">
+                                <span class="ug-loc">Navigation: Top Bar / Sidebar &rarr; Settings</span>
+                                <div class="doc-en">
+                                    <ol>
+                                        <li>Toggle <strong>Dark / Light Mode</strong> from the top bar or Settings, and configure default balance privacy.</li>
+                                        <li><strong>Google Cloud Sync</strong> operates over <code>https://</code> or Live Server; when opening directly via <code>file://</code>, use <code>.json</code> backups.</li>
+                                    </ol>
+                                </div>
+                                <div class="doc-tl doc-tl-block">
+                                    <ol>
+                                        <li><span class="doc-tl-tag">TL</span>Gamitin ang <strong>Dark / Light</strong> sa itaas para palitan ang theme. Tandaan: ang Cloud Sync ay para sa <code>https://</code> o Live Server; sa <code>file://</code>, gamitin ang <code>.json</code> backup.</li>
+                                    </ol>
+                                </div>
+                                <div class="ug-action-row">
+                                    <button type="button" class="ug-jump-link" onclick="navigateFromShortcut('settings', 'preferences', '#settingsAppearancePanel')">Appearance &amp; Sync &rarr;</button>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div id="ugEmptyMsg" class="ug-side-card ug-hidden" style="text-align:center;">
+                        <strong>No matching documentation topics found / Walang tumugmang gabay.</strong>
+                    </div>
+
+                    <div class="doc-advisory">
+                        <div class="doc-en"><strong>Storage Advisory:</strong> Badyetly saves records privately in this browser's local storage. Always download a <code>.json</code> backup before clearing browser site data or switching devices.</div>
+                        <div class="doc-tl doc-tl-block"><span class="doc-tl-tag">TL</span>Naka-save ang records mo sa browser na gamit mo ngayon. Mag-download ng <code>.json</code> backup sa Settings bago mag-clear ng cache o lumipat ng device.</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= HELP CENTER VIEW ================= -->
+
+        <section id="view-help" class="view" data-doc-lang="both">
+
+            <div class="doc-hero">
+                <div class="doc-hero-top">
+                    <div>
+                        <span class="doc-eyebrow">SUPPORT CENTER · BADYETLY V3.0</span>
+                        <h2>Help Center</h2>
+                        <p class="doc-hero-sub">
+                            <span class="doc-en-i">Find verified answers, resolve common issues, and manage your account safely.</span>
+                            <span class="doc-tl-i"> Mabilis na sagot at solusyon para sa karaniwang katanungan.</span>
+                        </p>
+                    </div>
+                    <div class="doc-lang-switch" id="hcLangTabs" role="group" aria-label="Help Center language">
+                        <button type="button" class="doc-lang-btn active" onclick="hcSetLang('both', this)">EN + TL</button>
+                        <button type="button" class="doc-lang-btn" onclick="hcSetLang('en', this)">English</button>
+                        <button type="button" class="doc-lang-btn" onclick="hcSetLang('tl', this)">Tagalog</button>
+                    </div>
+                </div>
+
+                <div class="doc-hero-search">
+                    <div class="doc-search-box">
+                        <span class="doc-search-icon" aria-hidden="true">⌕</span>
+                        <input type="text" id="helpSearchInput" class="doc-search-input"
+                            placeholder="Search FAQs (e.g. missing account, backup, pin, gastos, budget, dark mode)..."
+                            oninput="filterHelpCenter()">
+                    </div>
+                    <button type="button" class="doc-hero-btn" onclick="clearHelpSearch()">Clear</button>
+                    <button type="button" id="helpExpandAllBtn" class="doc-hero-btn doc-hero-btn-gold" onclick="toggleAllFaqs()">Expand All</button>
+                </div>
+            </div>
+
+            <div class="hc-panel">
+                <div class="hc-tabs-bar">
+                    <div class="hc-tab-list" id="helpCategoryTabs">
+                        <button type="button" class="hc-tab active" onclick="setHelpCategory('all', this)">All (16)</button>
+                        <button type="button" class="hc-tab" onclick="setHelpCategory('account', this)">Account &amp; Login</button>
+                        <button type="button" class="hc-tab" onclick="setHelpCategory('transactions', this)">Transactions</button>
+                        <button type="button" class="hc-tab" onclick="setHelpCategory('budget', this)">Budgets &amp; Goals</button>
+                        <button type="button" class="hc-tab" onclick="setHelpCategory('backup', this)">Backup &amp; Sync</button>
+                        <button type="button" class="hc-tab" onclick="setHelpCategory('privacy', this)">Theme &amp; Privacy</button>
+                    </div>
+                    <span id="helpResultCount" class="ug-meta-count">Showing 16 of 16 articles</span>
+                </div>
+
+                <div class="hc-faq-list" id="faqList">
+
+                    <details class="hc-faq-item" data-cat="account" data-tags="create account register gumawa bago">
+                        <summary><span>1. How do I create a Badyetly account?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Click <strong>Create Account</strong> on the login screen, enter your account name and password (4+ characters), confirm it, and optionally add a 4-digit Recovery PIN.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>I-click ang <strong>Create Account</strong> sa login page, ilagay ang pangalan, password, at optional na 4-digit Recovery PIN para sa proteksyon ng password reset.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="account" data-tags="cannot log in forgot password pin nakalimutan">
+                        <summary><span>2. What should I do if I cannot log in or forgot my password?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Verify your exact Account Name (tap Saved Accounts if shown) and password. Click <strong>Forgot password?</strong> on the login screen and enter your 4-digit Recovery PIN if configured.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Siguraduhing tama ang Account Name at password. Gamitin ang <strong>Forgot password?</strong> at ilagay ang 4-digit Recovery PIN kung nag-set ka nito.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="account" data-tags="missing old account nawala lumang account cleared browser restore">
+                        <summary><span>3. Why did my saved account disappear after clearing browser data?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Local profiles are stored in your browser's <code>localStorage</code>. Clearing site data, using Private/Incognito mode, or switching browsers removes local storage. Click <strong>Restore Backup</strong> on the login screen and upload your <code>.json</code> file to recover everything.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Nawawala ang local account kapag nag-clear ng browser cache, naka-Incognito, o lumipat ng browser. I-click ang <strong>Restore Backup</strong> sa login screen at piliin ang <code>.json</code> backup file mo para maibalik lahat ng records.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="account" data-tags="demo account try preview sample">
+                        <summary><span>4. What is the Demo Account used for?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Click <strong>Try Demo Account</strong> on the login screen to explore sample transactions, analytics, and goals without affecting your personal records.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Pang-testing ang <strong>Demo Account</strong> na may sample data para masubukan ang app nang hindi nagagalaw ang tunay mong account.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="transactions" data-tags="auto categorize category hashtag #tag smart entry">
+                        <summary><span>5. How does automatic expense categorization work?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Badyetly matches keywords in your description (such as rice, coffee, jeep, kuryente) to built-in categories. Add <code>#CategoryName</code> at the end of a line to assign a specific or custom category.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Binabasa ng Badyetly ang keywords sa gastos mo (hal. kanin, kape, pamasahe, kuryente). Pwede ring maglagay ng <code>#CategoryName</code> sa dulo para ikaw ang pumili ng kategorya.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="transactions" data-tags="expense not added skipped format smart entry">
+                        <summary><span>6. Why was my expense line skipped or not added?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Each line must include a valid positive amount, formatted like <code>Rice - 50</code> or <code>Coffee 120</code>, one purchase per line. Lines without a positive number are ignored.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Siguraduhing may positibong halaga bawat linya (hal. <code>Kanin - 50</code>) at isang item lang bawat linya.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="transactions" data-tags="quick add chips 1-tap shortcut">
+                        <summary><span>7. How do 1-Tap Quick-Add Chips work?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Tap any chip under Smart Expense Entry or the mobile Quick Add modal to log recurring daily purchases immediately. Click <strong>+ Add Chip</strong> to customize your list.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Isang tap lang sa <strong>Quick-Add Chip</strong> para ma-record agad ang madalas na gastos. Pindutin ang <strong>+ Add Chip</strong> para magdagdag ng sariling shortcut.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="transactions" data-tags="edit delete recurring bills bayarin">
+                        <summary><span>8. Can I edit, delete, or track monthly recurring bills?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Yes. Every income or expense row includes Edit and Delete actions. Fixed monthly bills (WiFi, Rent, Electricity) can be saved under <strong>Recurring Bills</strong> and logged with <strong>Log Payment</strong>.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Oo, may Edit at Delete ang bawat record. Para sa buwanang bayarin (WiFi, Renta, Kuryente), ilista sa <strong>Recurring Bills</strong> at pindutin ang <strong>Log Payment</strong> buwan-buwan.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="budget" data-tags="budget planner limit spending monitor badyet">
+                        <summary><span>9. How do I set and monitor monthly budgets?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Open <strong>Budget Planner</strong>, select a category and monthly cap, and click <strong>+ Save Budget</strong>. Usage bars recalculate automatically as you log expenses for that month.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Sa <strong>Budget Planner</strong>, pumili ng kategorya at ilagay ang limit bawat buwan. Kusang mag-a-update ang progress bar habang nagre-record ka ng gastos.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="budget" data-tags="savings goal pace deadline deduct spendable balance ipon">
+                        <summary><span>10. How do Goal Pace and Spendable Balance deduction work?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Adding a <strong>Target Date</strong> calculates how much to set aside per day, week, or month. Checking <strong>Deduct this goal from Spendable Balance</strong> ring-fences saved funds from spendable cash on Home.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Kapag may Target Date ang goal, lalabas ang kailangang ipon bawat araw, linggo, o buwan. I-check ang <strong>Deduct from Spendable Balance</strong> para nakahiwalay ang ipon sa panggastos sa Home.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="budget" data-tags="delete savings goal burahin">
+                        <summary><span>11. What happens if I delete a savings goal?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Only the selected savings goal is removed. All your income entries, expenses, and category budgets remain intact.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Yung piniling savings goal lang ang mawawala. Ligtas at hindi mabubura ang mga kita, gastos, at budgets mo.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="backup" data-tags="backup json export csv pdf report">
+                        <summary><span>12. How do I back up my data or export CSV / PDF reports?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Open <strong>Settings &rarr; Backup &amp; Restore</strong>. Click <strong>Download Backup</strong> for a full <code>.json</code> restore archive, <strong>Export CSV</strong> for spreadsheets, or <strong>Print / Save PDF</strong> for monthly reports.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Sa <strong>Settings</strong>, i-click ang <strong>Download Backup</strong> para sa buong <code>.json</code> file, <strong>Export CSV</strong> para sa Excel, o <strong>Print / Save PDF</strong> para sa buwanang summary.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="backup" data-tags="transfer another device lipat phone pc">
+                        <summary><span>13. How do I move my records to another browser or device?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Export a <code>.json</code> backup on your current device and restore it on the new browser or device. Over <code>https://</code>, you can also sign in with Google Cloud Sync.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Mag-download ng <code>.json</code> backup sa lumang device at i-restore sa bagong device o browser. Kung naka-<code>https://</code>, pwede ring gamitin ang Google Cloud Sync.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="backup" data-tags="google sign in blocked file:// local mode popup cloud sync">
+                        <summary><span>14. Why is Google Cloud Sync unavailable in file:// mode?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Modern browsers restrict Google Sign-In popups on local <code>file://</code> paths for security. Use <strong>Download Backup (.json)</strong> locally, or host/serve Badyetly over Live Server or <code>https://</code> for Cloud Sync.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Hinaharangan ng browser ang Google login popup kapag binuksan nang direkta mula sa folder (<code>file://</code>). Gamitin ang <strong>Download Backup (.json)</strong> o buksan sa Live Server / <code>https://</code> para sa Cloud Sync.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="privacy" data-tags="dark mode light mode theme hide balance privacy">
+                        <summary><span>15. How do I switch Light/Dark Mode or hide balance amounts?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en">Use the <strong>Dark / Light</strong> toggle in the top bar or Settings. Click <strong>Hide</strong> on your Total Balance card (or set default privacy in Settings) to mask amounts as <code>₱•••••</code>.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Pindutin ang <strong>Dark / Light</strong> sa itaas o sa Settings para magpalit ng theme. I-click ang <strong>Hide</strong> sa Balance card para gawing <code>₱•••••</code> ang halaga.</div>
+                        </div>
+                    </details>
+
+                    <details class="hc-faq-item" data-cat="privacy" data-tags="clear all account data delete burahin reset">
+                        <summary><span>16. What is the difference between Clear All Data and Delete Account?</span><span class="ug-chev">›</span></summary>
+                        <div class="faq-body">
+                            <p class="doc-en faq-en"><strong>Clear All Account Data</strong> wipes transactions, budgets, and goals while keeping your login credentials. <strong>Delete Current Account</strong> permanently removes the profile itself. Always download a backup first.</p>
+                            <div class="doc-tl doc-tl-block faq-tl"><span class="doc-tl-tag">TL</span>Ang <strong>Clear All Account Data</strong> ay bubura ng lahat ng records pero mananatili ang account login. Ang <strong>Delete Current Account</strong> ay bubura pati ng mismong account. Mag-backup muna!</div>
+                        </div>
+                    </details>
+
+                </div>
+
+                <div id="helpNoResults" class="doc-advisory hc-hidden">
+                    <strong>No matching FAQ articles found / Walang tumugmang sagot.</strong>
+                    Try broader keywords (e.g., <em>account, backup, pin, gastos, budget, goal</em>) or use the Question Finder below.
+                </div>
+            </div>
+
+            <div class="hc-support-grid">
+
+                <!-- LEFT: INSTANT ANSWER FINDER -->
+                <div class="hc-panel" style="margin-bottom:0 !important;">
+                    <div class="hc-card-head">
+                        <small>INSTANT ASSISTANCE</small>
+                        <h3>Ask a Question</h3>
+                    </div>
+                    <p class="helper-text" style="margin-bottom:10px;">
+                        <span class="doc-en-i">Describe your issue in English or Tagalog to surface relevant solutions.</span>
+                        <span class="doc-tl-i"> I-type ang tanong sa English o Tagalog para mahanap agad ang sagot.</span>
+                    </p>
+                    <textarea id="askHelpInput" rows="3"
+                        placeholder="e.g. nawala account ko, paano mag backup, why expense skipped..."></textarea>
+                    <div class="hc-ask-actions">
+                        <button type="button" class="hc-btn-primary" onclick="askHelpQuestion()">Find Answer</button>
+                        <button type="button" class="hc-btn-outline" onclick="clearAskHelp()">Clear</button>
+                        <button type="button" class="hc-btn-outline" onclick="copyHelpReport()">Copy Info</button>
+                    </div>
+                    <div id="askHelpStatus" aria-live="polite"></div>
+                    <div id="askHelpResults" style="display:none;"></div>
+                </div>
+
+                <!-- RIGHT: QUICK DIAGNOSTICS -->
+                <div class="hc-panel" style="margin-bottom:0 !important;">
+                    <div class="hc-card-head">
+                        <small>SYSTEM DIAGNOSTICS</small>
+                        <h3>Quick Troubleshooters</h3>
+                    </div>
+                    <div class="hc-diag-list">
+                        <div class="hc-diag-card">
+                            <span class="hc-diag-tag">Account Recovery</span>
+                            <h4>Only Demo User appears on Login</h4>
+                            <p class="doc-en">Browser storage was cleared or switched. Click <strong>Restore Backup</strong> and select your <code>.json</code> file.</p>
+                            <p class="doc-tl doc-tl-block"><span class="doc-tl-tag">TL</span>Na-clear ang browser cache o lumipat ng browser. Pindutin ang <strong>Restore Backup</strong> at piliin ang <code>.json</code> file mo.</p>
+                        </div>
+
+                        <div class="hc-diag-card">
+                            <span class="hc-diag-tag">Smart Entry</span>
+                            <h4>Expense line was not recorded</h4>
+                            <p class="doc-en">Format each line as <code>Item - Amount</code> (e.g., <code>Lunch - 85</code>) with an amount above zero.</p>
+                            <p class="doc-tl doc-tl-block"><span class="doc-tl-tag">TL</span>Siguraduhing may numero bawat linya (hal. <code>Tanghalian - 85</code>).</p>
+                        </div>
+
+                        <div class="hc-diag-card">
+                            <span class="hc-diag-tag">Cloud Sync</span>
+                            <h4>Google Sign-In button disabled</h4>
+                            <p class="doc-en">Browsers block OAuth on <code>file://</code>. Use <strong>Download Backup (.json)</strong> or serve via <code>https://</code>.</p>
+                            <p class="doc-tl doc-tl-block"><span class="doc-tl-tag">TL</span>Hindi gumagana ang Google login sa <code>file://</code>. Gamitin ang <strong>Download Backup (.json)</strong>.</p>
+                        </div>
+
+                        <div class="hc-diag-card">
+                            <span class="hc-diag-tag">Balance Calculation</span>
+                            <h4>Home balance looks lower than expected</h4>
+                            <p class="doc-en">Check the Home period filter (<em>All Time</em> vs <em>This Month</em>) or Goal <em>Deduct from Spendable Balance</em>.</p>
+                            <p class="doc-tl doc-tl-block"><span class="doc-tl-tag">TL</span>I-check kung naka-<em>This Month</em> ang filter o kung may Savings Goal na nakabawas sa Spendable Balance.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="doc-advisory" style="margin-top:18px !important;">
+                <div class="doc-en"><strong>Need Further Help?</strong> Review the User Guide chapters for full walkthroughs, and always keep an updated <code>.json</code> backup file in a safe folder.</div>
+                <div class="doc-tl doc-tl-block"><span class="doc-tl-tag">TL</span>Tingnan ang User Guide para sa kumpletong gabay, at laging mag-save ng <code>.json</code> backup sa ligtas na folder.</div>
+            </div>
+
+        </section>
+
+
+        <!-- ================= FOOTER ================= -->
+
+        <footer class="app-footer">
+            <span>BADYETLY</span>
+            <span>Track Your Pera Wisely · Make every peso count.</span>
+        </footer>
+
+    </main>
+
+    <!-- MOBILE QUICK-BACK FLOATING PILL -->
+    <button type="button" id="mobileBackPill" class="mobile-back-pill"
+        style="display:none;" onclick="goBackNav()" aria-label="Go back to previous screen">
+        <span aria-hidden="true">←</span>
+        <span id="mobileBackPillLabel">Back</span>
+    </button>
+
+    <!-- MOBILE QUICK-ADD FLOATING BUTTON -->
+    <button type="button" id="mobileFabBtn" class="mobile-fab"
+        onclick="openQuickAddModal()" aria-label="Quick add transaction">
+        +
+    </button>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav id="mobileBottomNav" class="mobile-bottom-nav" aria-label="Mobile navigation">
+        <button type="button" id="mnav-home" class="active" onclick="showView('home')">
+            <span class="mnav-icon" aria-hidden="true">⌂</span>
+            <span class="mnav-label">Home</span>
+        </button>
+        <button type="button" id="mnav-dashboard" onclick="showView('dashboard')">
+            <span class="mnav-icon" aria-hidden="true">▦</span>
+            <span class="mnav-label">Activity</span>
+        </button>
+        <button type="button" id="mnav-analytics" onclick="showView('analytics')">
+            <span class="mnav-icon" aria-hidden="true">◷</span>
+            <span class="mnav-label">Analytics</span>
+        </button>
+        <button type="button" id="mnav-budget" onclick="showView('budget')">
+            <span class="mnav-icon" aria-hidden="true">▤</span>
+            <span class="mnav-label">Budget</span>
+        </button>
+        <button type="button" id="mnav-more" onclick="openMobileMoreMenu()">
+            <span class="mnav-icon" aria-hidden="true">☰</span>
+            <span class="mnav-label">More</span>
+        </button>
+    </nav>
+
+</div>
+
+<!-- ================= MOBILE MORE MENU SHEET ================= -->
+
+<div id="mobileMoreModal" class="badyetly-modal mobile-sheet-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="mobileMoreTitle">
+    <div class="badyetly-modal-backdrop" onclick="closeMobileMoreMenu()"></div>
+    <div class="badyetly-modal-card mobile-more-card">
+        <div class="panel-heading" style="margin-bottom:14px;">
+            <div>
+                <span class="eyebrow">BADYETLY MENU</span>
+                <h3 id="mobileMoreTitle">More Options</h3>
+            </div>
+            <button type="button" class="btn-ghost" onclick="closeMobileMoreMenu()" aria-label="Close menu">✕</button>
+        </div>
+
+        <div class="mobile-more-account">
+            <div class="topbar-account-avatar">♙</div>
+            <div class="topbar-account-info">
+                <strong id="mobileMoreUser">My Account</strong>
+                <small>Personal Account · Stored locally</small>
+            </div>
+        </div>
+
+        <div class="mobile-more-list">
+            <button type="button" class="mobile-more-item" onclick="selectMobileMoreView('goals')">
+                <span class="mobile-more-icon">◇</span>
+                <span>Savings Goals</span>
+                <span class="mobile-more-arrow">›</span>
+            </button>
+            <button type="button" class="mobile-more-item" onclick="selectMobileMoreView('settings')">
+                <span class="mobile-more-icon">⚙</span>
+                <span>Settings &amp; Backup</span>
+                <span class="mobile-more-arrow">›</span>
+            </button>
+            <button type="button" class="mobile-more-item" onclick="selectMobileMoreView('guide')">
+                <span class="mobile-more-icon">▣</span>
+                <span>User Guide</span>
+                <span class="mobile-more-arrow">›</span>
+            </button>
+            <button type="button" class="mobile-more-item" onclick="selectMobileMoreView('help')">
+                <span class="mobile-more-icon">?</span>
+                <span>Help Center</span>
+                <span class="mobile-more-arrow">›</span>
+            </button>
+        </div>
+
+        <div class="badyetly-modal-actions" style="margin-top:16px;">
+            <button type="button" class="btn-danger-outline full-button" onclick="closeMobileMoreMenu(); logout();">
+                ↪ Log Out
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= QUICK-ADD TRANSACTION MODAL ================= -->
+
+<div id="quickAddModal" class="badyetly-modal mobile-sheet-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="quickAddModalTitle">
+    <div class="badyetly-modal-backdrop" onclick="closeQuickAddModal()"></div>
+    <div class="badyetly-modal-card">
+        <div class="panel-heading" style="margin-bottom:12px;">
+            <div>
+                <span class="eyebrow">FAST ENTRY</span>
+                <h3 id="quickAddModalTitle">Quick Add</h3>
+            </div>
+            <button type="button" class="btn-ghost" onclick="closeQuickAddModal()" aria-label="Close quick add">✕</button>
+        </div>
+
+        <div class="auth-tabs quick-add-tabs" role="tablist" aria-label="Transaction type">
+            <button type="button" id="qaTabExpense" class="auth-tab active" onclick="setQuickAddType('expense')">Expense</button>
+            <button type="button" id="qaTabIncome" class="auth-tab" onclick="setQuickAddType('income')">Income</button>
+        </div>
+
+        <div id="qaQuickChipsWrap" class="quick-chips-section" style="margin-top:12px;">
+            <div class="quick-chips-header">
+                <span class="quick-chips-label">1-TAP CHIPS</span>
+            </div>
+            <div id="qaQuickChipsList" class="quick-chips-list"></div>
+        </div>
+
+        <form id="quickAddForm" onsubmit="submitQuickAddModal(event)" style="margin-top:12px;">
+            <div class="form-group">
+                <label id="qaTextLabel" for="qaTextInput">Expense Item</label>
+                <input type="text" id="qaTextInput" placeholder="e.g. Coffee, Jeep fare, Lunch"
+                    oninput="updateQuickAddCategoryHint()" required>
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="qaAmountInput">Amount (₱)</label>
+                    <input type="number" id="qaAmountInput" min="0.01" step="0.01" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="qaDateInput">Date</label>
+                    <input type="date" id="qaDateInput" required>
+                </div>
+            </div>
+
+            <div id="qaCategoryWrap" class="form-group">
+                <div class="label-action-row">
+                    <label for="qaCategorySelect">Category</label>
+                    <button type="button" class="text-button"
+                        onclick="openManageCategoriesModal()">+ Manage</button>
+                </div>
+                <select id="qaCategorySelect" onchange="markQuickAddCategoryManual()">
+                    <option value="Food & Drinks">Food &amp; Drinks</option>
+                    <option value="Transportation">Transportation</option>
+                    <option value="Skincare & Personal Care">Skincare &amp; Personal Care</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Bills & Utilities">Bills &amp; Utilities</option>
+                    <option value="Education">Education</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
+            <div class="badyetly-modal-actions">
+                <button type="button" class="btn-outline" onclick="closeQuickAddModal()">Cancel</button>
+                <button type="submit" id="qaSubmitBtn" class="btn-primary">+ Save Expense</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- ================= EDIT MODAL ================= -->
+
+<div id="editModal" class="badyetly-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <div class="badyetly-modal-backdrop" onclick="closeEditModal()"></div>
+    <div class="badyetly-modal-card">
+        <div class="panel-heading" style="margin-bottom:14px;">
+            <div>
+                <span class="eyebrow" id="editModalEyebrow">UPDATE RECORD</span>
+                <h3 id="editModalTitle">Edit Item</h3>
+            </div>
+            <button type="button" class="btn-ghost" onclick="closeEditModal()" aria-label="Close modal">✕</button>
+        </div>
+        <form id="editModalForm" onsubmit="saveEditModal(event)">
+            <div id="editModalFields"></div>
+            <div class="badyetly-modal-actions">
+                <button type="button" class="btn-outline" onclick="closeEditModal()">Cancel</button>
+                <button type="submit" class="btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- ================= CONFIRM & PROMPT DIALOG MODAL ================= -->
+
+<div id="dialogModal" class="badyetly-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="dialogModalTitle">
+    <div class="badyetly-modal-backdrop" onclick="closeDialogModal(null)"></div>
+    <div class="badyetly-modal-card">
+        <div class="panel-heading" style="margin-bottom:12px;">
+            <div>
+                <span class="eyebrow" id="dialogModalEyebrow">CONFIRMATION</span>
+                <h3 id="dialogModalTitle">Please Confirm</h3>
+            </div>
+            <button type="button" class="btn-ghost" onclick="closeDialogModal(null)" aria-label="Close modal">✕</button>
+        </div>
+        <form id="dialogModalForm" onsubmit="submitDialogModal(event)">
+            <p id="dialogModalMessage" class="badyetly-dialog-message"></p>
+            <div id="dialogModalInputWrap" class="form-group" style="display:none; margin-top:14px;">
+                <label id="dialogModalInputLabel" for="dialogModalInput">Value</label>
+                <input type="text" id="dialogModalInput" autocomplete="off">
+            </div>
+            <div class="badyetly-modal-actions">
+                <button type="button" id="dialogModalCancelBtn" class="btn-outline" onclick="closeDialogModal(null)">Cancel</button>
+                <button type="submit" id="dialogModalConfirmBtn" class="btn-primary">Confirm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- ================= IOS INSTALL GUIDE MODAL ================= -->
+
+<div id="iosInstallModal" class="badyetly-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="iosInstallTitle">
+    <div class="badyetly-modal-backdrop" onclick="closeIOSInstallModal()"></div>
+    <div class="badyetly-modal-card">
+        <div class="panel-heading" style="margin-bottom:12px;">
+            <div>
+                <span class="eyebrow">IPHONE & IPAD</span>
+                <h3 id="iosInstallTitle">Install Badyetly on iOS</h3>
+            </div>
+            <button type="button" class="btn-ghost" onclick="closeIOSInstallModal()" aria-label="Close modal">✕</button>
+        </div>
+        <div class="pwa-ios-steps">
+            <p>1. Tap the <strong>Share</strong> icon (square with arrow pointing up) in Safari's toolbar.</p>
+            <p>2. Scroll down and tap <strong>Add to Home Screen</strong>.</p>
+            <p>3. Tap <strong>Add</strong> at the top-right corner to launch Badyetly like a native app.</p>
+        </div>
+        <div class="badyetly-modal-actions">
+            <button type="button" class="btn-primary" onclick="closeIOSInstallModal()">Got it</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= MANAGE CUSTOM CATEGORIES MODAL ================= -->
+
+<div id="categoriesModal" class="badyetly-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="categoriesModalTitle">
+    <div class="badyetly-modal-backdrop" onclick="closeManageCategoriesModal()"></div>
+    <div class="badyetly-modal-card">
+        <div class="panel-heading" style="margin-bottom:12px;">
+            <div>
+                <span class="eyebrow">EXPENSE CATEGORIES</span>
+                <h3 id="categoriesModalTitle">Manage Custom Categories</h3>
+            </div>
+            <button type="button" class="btn-ghost" onclick="closeManageCategoriesModal()" aria-label="Close modal">✕</button>
+        </div>
+
+        <p class="helper-text" style="margin-bottom:12px;">
+            Add your own categories (e.g. Pets, Coffee, Health, Tithes). Tip: Type <strong>#CategoryName</strong> in Smart Expense Entry to auto-tag!
+        </p>
+
+        <form onsubmit="addCustomCategory(event)" class="cat-add-form">
+            <input type="text" id="newCustomCatInput" maxlength="60"
+                placeholder="e.g. Pets, Health & Medicine, Travel" required>
+            <button type="submit" class="btn-primary">+ Add</button>
+        </form>
+
+        <div class="cat-manager-section">
+            <span class="quick-chips-label">YOUR CUSTOM CATEGORIES</span>
+            <div id="customCategoriesList" class="custom-cat-list"></div>
+        </div>
+
+        <div class="cat-manager-section">
+            <span class="quick-chips-label">BUILT-IN CATEGORIES</span>
+            <div id="defaultCategoriesList" class="custom-cat-list"></div>
+        </div>
+
+        <div class="badyetly-modal-actions">
+            <button type="button" class="btn-outline" onclick="closeManageCategoriesModal()">Done</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= TOAST NOTIFICATIONS & OFFLINE INDICATOR ================= -->
+
+<div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<div id="offlineBanner" class="offline-banner" role="status" style="display:none;">
+    <span class="offline-dot"></span>
+    <span>Offline Mode — Your changes stay saved on this device.</span>
+</div>
+
+
+<!-- ================= PRINTABLE MONTHLY REPORT CONTAINER ================= -->
+
+<section id="printableReport" class="printable-report" aria-hidden="true"></section>
+
+
+<!-- ================= PASSWORD TOGGLE ================= -->
+
+<script>
+function togglePassword(inputId, button) {
+    const input = document.getElementById(inputId);
+
+    if (!input) return;
+
+    if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "Hide";
+        button.setAttribute("aria-label", "Hide password");
+    } else {
+        input.type = "password";
+        button.textContent = "Show";
+        button.setAttribute("aria-label", "Show password");
+    }
+}
+</script>
+
+<!-- ================= USER GUIDE & HELP CENTER SCRIPT ================= -->
+
+<script>
+(function () {
+    var ugPhase = "all";
+    var ugExpanded = false;
+    var CHECK_KEY = "badyetly_ug_checks";
+
+    function updateCheckUI() {
+        var boxes = document.querySelectorAll("#view-guide [data-ug-check]");
+        var done = 0;
+        boxes.forEach(function (cb) { if (cb.checked) done++; });
+        var badge = document.getElementById("ugCheckCount");
+        if (badge) badge.textContent = done + " / " + boxes.length;
+        var bar = document.getElementById("ugCheckBar");
+        if (bar && boxes.length) bar.style.width = Math.round((done / boxes.length) * 100) + "%";
+    }
+
+    window.ugToggleCheck = function () {
+        var state = {};
+        document.querySelectorAll("#view-guide [data-ug-check]").forEach(function (cb) {
+            state[cb.getAttribute("data-ug-check")] = cb.checked;
+        });
+        try { localStorage.setItem(CHECK_KEY, JSON.stringify(state)); } catch (e) {}
+        updateCheckUI();
+    };
+
+    try {
+        var saved = JSON.parse(localStorage.getItem(CHECK_KEY) || "{}");
+        document.querySelectorAll("#view-guide [data-ug-check]").forEach(function (cb) {
+            var k = cb.getAttribute("data-ug-check");
+            if (saved && saved[k]) cb.checked = true;
+        });
+    } catch (e) {}
+    updateCheckUI();
+
+    window.ugSetLang = function (lang, btn) {
+        var root = document.getElementById("view-guide");
+        if (root) root.setAttribute("data-doc-lang", lang);
+        document.querySelectorAll("#ugLangTabs .doc-lang-btn").forEach(function (b) { b.classList.remove("active"); });
+        if (btn) btn.classList.add("active");
+    };
+
+    window.hcSetLang = function (lang, btn) {
+        var root = document.getElementById("view-help");
+        if (root) root.setAttribute("data-doc-lang", lang);
+        document.querySelectorAll("#hcLangTabs .doc-lang-btn").forEach(function (b) { b.classList.remove("active"); });
+        if (btn) btn.classList.add("active");
+    };
+
+    window.ugSetPhase = function (phase, btn) {
+        ugPhase = phase || "all";
+        document.querySelectorAll("#ugPhaseTabs .ug-nav-btn").forEach(function (b) { b.classList.remove("active"); });
+        if (btn) btn.classList.add("active");
+        window.ugFilter();
+    };
+
+    window.ugFilter = function () {
+        var input = document.getElementById("ugSearchInput");
+        var q = input ? input.value.trim().toLowerCase() : "";
+        var total = 0, shown = 0;
+
+        document.querySelectorAll("#view-guide .ug-chapter").forEach(function (sec) {
+            var p = sec.getAttribute("data-ug-phase");
+            var phaseOk = ugPhase === "all" || p === ugPhase;
+            var secShown = 0;
+
+            sec.querySelectorAll(".ug-step").forEach(function (step) {
+                total++;
+                var match = phaseOk && (!q || (step.textContent || "").toLowerCase().indexOf(q) !== -1);
+                step.classList.toggle("ug-hidden", !match);
+                if (match) {
+                    shown++;
+                    secShown++;
+                    if (q) step.open = true;
+                }
+            });
+            sec.classList.toggle("ug-hidden", secShown === 0);
+        });
+
+        var c = document.getElementById("ugStepCounter");
+        if (c) c.textContent = "Showing " + shown + " of " + total + " topics";
+        var empty = document.getElementById("ugEmptyMsg");
+        if (empty) empty.classList.toggle("ug-hidden", shown > 0);
+    };
+
+    window.ugClearSearch = function () {
+        var input = document.getElementById("ugSearchInput");
+        if (input) { input.value = ""; input.focus(); }
+        ugPhase = "all";
+        document.querySelectorAll("#ugPhaseTabs .ug-nav-btn").forEach(function (b, i) {
+            b.classList.toggle("active", i === 0);
+        });
+        window.ugFilter();
+    };
+
+    window.ugToggleAll = function () {
+        ugExpanded = !ugExpanded;
+        document.querySelectorAll("#view-guide .ug-step:not(.ug-hidden)").forEach(function (s) { s.open = ugExpanded; });
+        var btn = document.getElementById("ugExpandBtn");
+        if (btn) btn.textContent = ugExpanded ? "Collapse All" : "Expand All";
+    };
+
+    var activeHelpCategory = "all";
+    var allFaqsExpanded = false;
+
+    function escapeHtml(text) {
+        return String(text || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    window.setHelpCategory = function (cat, btnEl) {
+        activeHelpCategory = cat || "all";
+        document.querySelectorAll("#helpCategoryTabs .hc-tab").forEach(function (p) {
+            p.classList.remove("active");
+        });
+        if (btnEl) btnEl.classList.add("active");
+        window.filterHelpCenter();
+    };
+
+    window.filterHelpCenter = function () {
+        var input = document.getElementById("helpSearchInput");
+        var query = input ? input.value.trim().toLowerCase() : "";
+        var items = document.querySelectorAll("#faqList .hc-faq-item");
+        var shown = 0;
+
+        items.forEach(function (item) {
+            var cat = item.getAttribute("data-cat") || "";
+            var tags = (item.getAttribute("data-tags") || "").toLowerCase();
+            var content = (item.textContent || "").toLowerCase();
+            var matchesCat = activeHelpCategory === "all" || cat === activeHelpCategory;
+            var matchesQuery = !query || content.indexOf(query) !== -1 || tags.indexOf(query) !== -1;
+
+            if (matchesCat && matchesQuery) {
+                item.classList.remove("hc-hidden");
+                if (query) item.open = true;
+                shown++;
+            } else {
+                item.classList.add("hc-hidden");
+            }
+        });
+
+        var countEl = document.getElementById("helpResultCount");
+        if (countEl) countEl.textContent = "Showing " + shown + " of " + items.length + " articles";
+
+        var emptyEl = document.getElementById("helpNoResults");
+        if (emptyEl) emptyEl.classList.toggle("hc-hidden", shown > 0);
+    };
+
+    window.clearHelpSearch = function () {
+        var input = document.getElementById("helpSearchInput");
+        if (input) { input.value = ""; input.focus(); }
+        activeHelpCategory = "all";
+        document.querySelectorAll("#helpCategoryTabs .hc-tab").forEach(function (p, idx) {
+            p.classList.toggle("active", idx === 0);
+        });
+        window.filterHelpCenter();
+    };
+
+    window.toggleAllFaqs = function () {
+        allFaqsExpanded = !allFaqsExpanded;
+        document.querySelectorAll("#faqList .hc-faq-item:not(.hc-hidden)").forEach(function (item) {
+            item.open = allFaqsExpanded;
+        });
+        var btn = document.getElementById("helpExpandAllBtn");
+        if (btn) btn.textContent = allFaqsExpanded ? "Collapse All" : "Expand All";
+    };
+
+    window.clearAskHelp = function () {
+        var input = document.getElementById("askHelpInput");
+        var results = document.getElementById("askHelpResults");
+        var status = document.getElementById("askHelpStatus");
+        if (input) { input.value = ""; input.focus(); }
+        if (results) { results.innerHTML = ""; results.style.display = "none"; }
+        if (status) status.textContent = "";
+    };
+
+    window.askHelpQuestion = function () {
+        var input = document.getElementById("askHelpInput");
+        var results = document.getElementById("askHelpResults");
+        var status = document.getElementById("askHelpStatus");
+        if (!input || !results) return;
+
+        var raw = input.value.trim();
+        if (!raw) {
+            if (status) status.textContent = "Please enter a question first. / Mag-type muna ng tanong mo.";
+            results.style.display = "none";
+            input.focus();
+            return;
+        }
+
+        if (status) status.textContent = "";
+
+        var words = raw.toLowerCase().split(/\s+/).filter(function (w) { return w.length >= 2; });
+        var scored = [];
+
+        document.querySelectorAll("#faqList .hc-faq-item").forEach(function (item) {
+            var summaryEl = item.querySelector("summary span:first-child");
+            var enEl = item.querySelector(".faq-en");
+            var tlEl = item.querySelector(".faq-tl");
+            var tags = (item.getAttribute("data-tags") || "").toLowerCase();
+            var title = summaryEl ? summaryEl.textContent.trim() : "";
+            var enText = enEl ? enEl.textContent.trim() : "";
+            var tlText = tlEl ? tlEl.textContent.replace(/^TL\s*/i, "").trim() : "";
+            var haystack = (title + " " + enText + " " + tlText + " " + tags).toLowerCase();
+
+            var score = 0;
+            words.forEach(function (w) {
+                if (haystack.indexOf(w) !== -1) score += tags.indexOf(w) !== -1 ? 3 : 1;
+            });
+
+            if (score > 0) scored.push({ score: score, title: title, en: enText, tl: tlText });
+        });
+
+        scored.sort(function (a, b) { return b.score - a.score; });
+
+        var top = scored.slice(0, 3);
+        var html = '<div class="ask-results-header">';
+        html += '<strong>Results for: "' + escapeHtml(raw) + '"</strong>';
+        html += '<button type="button" class="hc-btn-outline" onclick="clearAskHelp()">Close ✕</button>';
+        html += '</div>';
+
+        if (top.length === 0) {
+            html += '<div class="ask-result-item">';
+            html += '<h4>No direct match found / Walang eksaktong sagot</h4>';
+            html += '<p><strong>EN:</strong> Try keywords like <em>account, backup, restore, pin, expense, budget, goal</em> or review Quick Troubleshooters.</p>';
+            html += '<p style="margin-top:5px;"><strong>TL:</strong> Subukan ang keyword gaya ng <em>account, backup, pin, gastos, budget, ipon</em> o tingnan ang Quick Troubleshooters.</p>';
+            html += '</div>';
+        } else {
+            top.forEach(function (match) {
+                html += '<div class="ask-result-item">';
+                html += '<h4>' + escapeHtml(match.title) + '</h4>';
+                html += '<p><strong>EN:</strong> ' + escapeHtml(match.en) + '</p>';
+                html += '<p style="margin-top:5px;"><strong>TL:</strong> ' + escapeHtml(match.tl) + '</p>';
+                html += '</div>';
+            });
+        }
+
+        results.innerHTML = html;
+        results.style.display = "block";
+    };
+
+    window.copyHelpReport = function () {
+        var input = document.getElementById("askHelpInput");
+        var status = document.getElementById("askHelpStatus");
+        var question = input && input.value.trim() ? input.value.trim() : "(No question typed)";
+        var theme = document.documentElement.getAttribute("data-theme") === "dark" ? "Dark" : "Light";
+        var mode = window.location.protocol === "file:" ? "Local File (file://)" : window.location.protocol;
+        var report = "Badyetly v3.0 Support Info\nQuestion: " + question + "\nTheme: " + theme + "\nMode: " + mode;
+
+        function onSuccess() {
+            if (status) status.textContent = "Copied to clipboard. / Nakopya na ang impormasyon.";
+        }
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(report).then(onSuccess).catch(fallbackCopy);
+        } else {
+            fallbackCopy();
+        }
+
+        function fallbackCopy() {
+            try {
+                var ta = document.createElement("textarea");
+                ta.value = report;
+                ta.setAttribute("readonly", "");
+                ta.style.position = "fixed";
+                ta.style.left = "-9999px";
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                document.body.removeChild(ta);
+                onSuccess();
+            } catch (err) {
+                if (status) status.textContent = "Unable to copy automatically.";
+            }
+        }
+    };
+})();
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    getDocFromServer,
+    getDocs,
+    collection,
+    writeBatch,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    projectId: "graphite-epoch-3pd8p",
+    appId: "1:171358471367:web:1f15effccc9e87368feae2",
+    apiKey: "AIzaSyBp_Bp2mhoikDgurhk6czwAe6sB79JUOzw",
+    authDomain: "graphite-epoch-3pd8p.firebaseapp.com",
+    firestoreDatabaseId: "ai-studio-saveledger-2f7b7d1c-5991-4a06-acc8-7109076fda33",
+    storageBucket: "graphite-epoch-3pd8p.firebasestorage.app",
+    messagingSenderId: "171358471367"
+};
+
+const OperationType = {
+    CREATE: "create",
+    UPDATE: "update",
+    DELETE: "delete",
+    LIST: "list",
+    GET: "get",
+    WRITE: "write"
+};
+
+let app = null;
+let auth = null;
+let db = null;
+
+function handleFirestoreError(error, operationType, path) {
+    const currentUser = auth ? auth.currentUser : null;
+    const errInfo = {
+        error: error instanceof Error ? error.message : String(error),
+        authInfo: {
+            userId: currentUser ? currentUser.uid : null,
+            email: currentUser ? currentUser.email : null,
+            emailVerified: currentUser ? currentUser.emailVerified : null,
+            isAnonymous: currentUser ? currentUser.isAnonymous : null,
+            tenantId: currentUser ? currentUser.tenantId : null,
+            providerInfo: currentUser && Array.isArray(currentUser.providerData)
+                ? currentUser.providerData.map(provider => ({
+                    providerId: provider.providerId,
+                    email: provider.email
+                }))
+                : []
+        },
+        operationType,
+        path
+    };
+    console.error("Firestore Error:", JSON.stringify(errInfo));
+    throw new Error(JSON.stringify(errInfo));
+}
+
+try {
+    app = initializeApp(firebaseConfig);
+    db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+    auth = getAuth(app);
+
+    (async function testConnection() {
+        try {
+            await getDocFromServer(doc(db, "test", "connection"));
+        } catch (error) {
+            if (error instanceof Error && error.message.includes("the client is offline")) {
+                console.error("Please check your Firebase configuration.");
+            }
+        }
+    })();
+
+    window.BadyetlyFirebase = {
+        ready: true,
+        OperationType,
+        handleFirestoreError,
+        auth,
+        db,
+        signInWithGoogle: async () => {
+            const provider = new GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: "select_account" });
+            return signInWithPopup(auth, provider);
+        },
+        signOutGoogle: () => signOut(auth),
+        onAuthChange: (callback) => onAuthStateChanged(auth, callback),
+        getUserWorkspace: async (uid) => {
+            const userPath = `users/${uid}`;
+            try {
+                const snap = await getDoc(doc(db, "users", uid));
+                return snap.exists() ? snap.data() : null;
+            } catch (error) {
+                handleFirestoreError(error, OperationType.GET, userPath);
+            }
+        },
+        getUserIncomes: async (uid) => {
+            const colPath = `users/${uid}/incomes`;
+            try {
+                const snap = await getDocs(collection(db, "users", uid, "incomes"));
+                return snap.docs.map(d => d.data());
+            } catch (error) {
+                handleFirestoreError(error, OperationType.LIST, colPath);
+            }
+        },
+        getUserExpenses: async (uid) => {
+            const colPath = `users/${uid}/expenses`;
+            try {
+                const snap = await getDocs(collection(db, "users", uid, "expenses"));
+                return snap.docs.map(d => d.data());
+            } catch (error) {
+                handleFirestoreError(error, OperationType.LIST, colPath);
+            }
+        },
+        pushWorkspaceBatch: async (uid, workspacePayload, incomesList, expensesList, existingMeta) => {
+            const userDocRef = doc(db, "users", uid);
+            const serverTs = serverTimestamp();
+
+            const existingWorkspaceCreatedAt = existingMeta && existingMeta.workspaceCreatedAt
+                ? existingMeta.workspaceCreatedAt
+                : null;
+            const existingIncomeCreatedAt = (existingMeta && existingMeta.incomes) || {};
+            const existingExpenseCreatedAt = (existingMeta && existingMeta.expenses) || {};
+
+            const ops = [];
+
+            ops.push({
+                type: "set",
+                ref: userDocRef,
+                data: {
+                    ...workspacePayload,
+                    ownerId: uid,
+                    createdAt: existingWorkspaceCreatedAt || serverTs,
+                    updatedAt: serverTs
+                }
+            });
+
+            const nextIncomeIds = new Set();
+            incomesList.forEach(item => {
+                nextIncomeIds.add(item.id);
+                ops.push({
+                    type: "set",
+                    ref: doc(db, "users", uid, "incomes", item.id),
+                    data: {
+                        ...item,
+                        ownerId: uid,
+                        createdAt: existingIncomeCreatedAt[item.id] || serverTs,
+                        updatedAt: serverTs
+                    }
+                });
+            });
+
+            Object.keys(existingIncomeCreatedAt).forEach(oldId => {
+                if (!nextIncomeIds.has(oldId)) {
+                    ops.push({
+                        type: "delete",
+                        ref: doc(db, "users", uid, "incomes", oldId)
+                    });
+                }
+            });
+
+            const nextExpenseIds = new Set();
+            expensesList.forEach(item => {
+                nextExpenseIds.add(item.id);
+                ops.push({
+                    type: "set",
+                    ref: doc(db, "users", uid, "expenses", item.id),
+                    data: {
+                        ...item,
+                        ownerId: uid,
+                        createdAt: existingExpenseCreatedAt[item.id] || serverTs,
+                        updatedAt: serverTs
+                    }
+                });
+            });
+
+            Object.keys(existingExpenseCreatedAt).forEach(oldId => {
+                if (!nextExpenseIds.has(oldId)) {
+                    ops.push({
+                        type: "delete",
+                        ref: doc(db, "users", uid, "expenses", oldId)
+                    });
+                }
+            });
+
+            const CHUNK_SIZE = 450;
+            for (let i = 0; i < ops.length; i += CHUNK_SIZE) {
+                const chunk = ops.slice(i, i + CHUNK_SIZE);
+                const batch = writeBatch(db);
+                chunk.forEach(op => {
+                    if (op.type === "delete") {
+                        batch.delete(op.ref);
+                    } else {
+                        batch.set(op.ref, op.data);
+                    }
+                });
+                try {
+                    await batch.commit();
+                } catch (error) {
+                    handleFirestoreError(error, OperationType.WRITE, `users/${uid}`);
+                }
+            }
+        }
+    };
+
+    window.dispatchEvent(new CustomEvent("badyetly:firebase-ready"));
+} catch (err) {
+    console.warn("Firebase initialization deferred/offline:", err);
+    window.BadyetlyFirebase = { ready: false, error: String(err) };
+}
+</script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
