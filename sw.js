@@ -1,4 +1,4 @@
-const CACHE_NAME = "badyetly-pwa-v18";
+const CACHE_NAME = "badyetly-pwa-v19";
 const APP_SHELL = [
     "./", "./index.html", "./style.css", "./script.js", "./manifest.json",
     "./icon.svg", "./pwa-192x192.png", "./pwa-512x512.png",
@@ -8,7 +8,7 @@ const APP_SHELL = [
 self.addEventListener("install", e => {
     e.waitUntil(
         caches.open(CACHE_NAME)
-            .then(c => Promise.allSettled(APP_SHELL.map(u => c.add(u))))
+            .then(c => Promise.allSettled(APP_SHELL.map(u => c.add(new Request(u, { cache: "reload" })))))
             .then(() => self.skipWaiting())
     );
 });
@@ -32,10 +32,21 @@ self.addEventListener("fetch", e => {
             fetch(req, { signal: ctrl.signal })
                 .then(res => {
                     clearTimeout(timer);
-                    if (res && res.ok) caches.open(CACHE_NAME).then(c => c.put("./index.html", res.clone()));
+                    if (res && res.ok && !res.redirected) {
+                        const cloneA = res.clone();
+                        const cloneB = res.clone();
+                        caches.open(CACHE_NAME).then(c => {
+                            c.put("./index.html", cloneA);
+                            c.put("./", cloneB);
+                        });
+                    }
                     return res;
                 })
-                .catch(() => caches.match("./index.html", { ignoreSearch: true }))
+                .catch(() =>
+                    caches.match(req, { ignoreSearch: true })
+                        .then(r => r || caches.match("./index.html", { ignoreSearch: true }))
+                        .then(r => r || caches.match("./", { ignoreSearch: true }))
+                )
         );
         return;
     }
@@ -43,7 +54,7 @@ self.addEventListener("fetch", e => {
     e.respondWith(
         caches.match(req, { ignoreSearch: true }).then(cached => {
             const net = fetch(req).then(res => {
-                if (res && res.ok) caches.open(CACHE_NAME).then(c => c.put(req, res.clone()));
+                if (res && res.ok && !res.redirected) caches.open(CACHE_NAME).then(c => c.put(req, res.clone()));
                 return res;
             }).catch(() => cached);
             return cached || net;

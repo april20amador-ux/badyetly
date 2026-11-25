@@ -7,7 +7,12 @@ const ACCOUNT_KEY = "badyetly_accounts";
 const USER_KEY = "badyetly_user";
 const THEME_KEY = "badyetly_theme";
 
-let user = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
+let user = null;
+try {
+    user = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
+} catch (error) {
+    user = null;
+}
 let accounts = [];
 let activeFilterDate = null;
 let activeHomePeriod = "all";
@@ -15,19 +20,39 @@ let activeReportMonth = "";
 
 function setActiveUserSession(username, keepLoggedIn = true) {
     user = username;
-    if (keepLoggedIn) {
-        localStorage.setItem(USER_KEY, username);
-        sessionStorage.removeItem(USER_KEY);
-    } else {
-        sessionStorage.setItem(USER_KEY, username);
-        localStorage.removeItem(USER_KEY);
+    try {
+        if (keepLoggedIn) {
+            localStorage.setItem(USER_KEY, username);
+            sessionStorage.removeItem(USER_KEY);
+        } else {
+            sessionStorage.setItem(USER_KEY, username);
+            localStorage.removeItem(USER_KEY);
+        }
+    } catch (error) {
+        console.warn("Session storage unavailable:", error);
     }
 }
 
 function clearActiveUserSession() {
-    localStorage.removeItem(USER_KEY);
-    sessionStorage.removeItem(USER_KEY);
+    try {
+        localStorage.removeItem(USER_KEY);
+        sessionStorage.removeItem(USER_KEY);
+    } catch (error) {
+        console.warn("Session clear skipped:", error);
+    }
     user = null;
+}
+
+function enterAppSession() {
+    if (typeof checkAuth === "function") {
+        checkAuth();
+        if (typeof showView === "function") {
+            showView("home", { preserveStack: true });
+        }
+        window.scrollTo({ top: 0, behavior: "auto" });
+    } else {
+        location.reload();
+    }
 }
 
 let data = {
@@ -505,7 +530,7 @@ function registerServiceWorker() {
 
     if (!isSecureContext) return;
 
-    navigator.serviceWorker.register("./sw.js").catch(error => {
+    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).catch(error => {
         console.warn("Service worker registration skipped:", error);
     });
 }
@@ -1807,7 +1832,7 @@ function login() {
         setActiveUserSession(account.name, keepLoggedIn);
         data = loadUserData(user);
         activeFilterDate = null;
-        location.reload();
+        enterAppSession();
         return;
     }
 
@@ -1830,7 +1855,7 @@ function login() {
     data = loadUserData(user);
     activeFilterDate = null;
 
-    location.reload();
+    enterAppSession();
 }
 
 
@@ -1896,9 +1921,9 @@ function tryDemoAccount() {
         }
     }
 
-    setActiveUserSession(demoAccount.name, false);
+    setActiveUserSession(demoAccount.name, true);
     showToast("Logged in as Demo User (sample data loaded)!", "success", 3000);
-    setTimeout(() => location.reload(), 250);
+    enterAppSession();
 }
 
 async function logout() {
@@ -5408,7 +5433,7 @@ async function createNewAccountFromBackup(imported, originalName) {
                 "success",
                 4500
             );
-            setTimeout(() => location.reload(), 250);
+            enterAppSession();
             return;
         }
 
